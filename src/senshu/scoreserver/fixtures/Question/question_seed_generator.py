@@ -5,7 +5,6 @@ import random
 import generator_template as gt
 import pprint
 
-NUM = 10
 MODEL_NAME = 'scoreserver.question'
 
 class Question(object):
@@ -41,7 +40,7 @@ class Question(object):
             problem_url=self.problem_url
         )
 
-def get_question_jsondata():
+def get_question_jsondata(NUM):
     print("*"*20 + " Question " + "*"*20)
     fixture_list = []
     for pk in range(NUM):

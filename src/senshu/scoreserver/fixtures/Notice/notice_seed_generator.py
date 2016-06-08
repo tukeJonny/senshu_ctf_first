@@ -5,7 +5,6 @@ import generator_template as gt
 import pprint
 
 MODEL_NAME = "scoreserver.notice"
-NUM = 10
 
 class Notice(object):
     def __init__(self):
@@ -24,7 +23,7 @@ class Notice(object):
             description=self.description
         )
 
-def get_notice_jsondata():
+def get_notice_jsondata(NUM):
     print("*"*20 + " Notice " + "*"*20)
     fixture_list = []
     for pk in range(NUM):
