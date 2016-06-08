@@ -38,8 +38,10 @@ class UserAdmin(admin.ModelAdmin):
         (None, {'fields': ['username']}),
         ("Hashed Password For Login", {'fields': ['password']})
     ]
-    list_display = ('username', 'password')
+    list_display = ('username', 'password', 'is_active')
+    list_filter = ['is_active']
     search_fields = ['username']
+
 
 class AttackPointHistoryAdmin(admin.ModelAdmin):
     fieldsets = [

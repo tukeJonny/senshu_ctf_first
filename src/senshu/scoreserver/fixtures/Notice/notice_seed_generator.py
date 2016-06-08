@@ -32,7 +32,7 @@ def get_notice_jsondata(NUM):
         fixture_list.append(notice)
     jsondata = json.dumps(fixture_list)
     pprint.pprint(jsondata)
-    print("*"*20 + " Finish! " + "*"*20)
+    print("*"*20 + " Finish! " + "*"*20 + "\n")
     return(jsondata)
 
 if __name__ == "__main__":

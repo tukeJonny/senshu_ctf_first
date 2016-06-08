@@ -18,7 +18,7 @@ def get_category_jsondata():
         fixture_list.append(question)
     jsondata = json.dumps(fixture_list)
     pprint.pprint(jsondata)
-    print("*"*20 + " Finish! " + "*"*20)
+    print("*"*20 + " Finish! " + "*"*20 + "\n")
     return(jsondata)
 
 
