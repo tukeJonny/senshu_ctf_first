@@ -21,6 +21,7 @@ def get_category_jsondata():
     print("*"*20 + " Finish! " + "*"*20)
     return(jsondata)
 
+
 if __name__ == "__main__":
     #pass
     get_category_jsondata()

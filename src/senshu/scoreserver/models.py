@@ -9,6 +9,9 @@ class Notice(models.Model):
 class Category(models.Model):
     name = models.CharField(default='', max_length=50, unique=True)
 
+    def __str__(self):
+        return self.name
+
 class Question(models.Model):
     category = models.ForeignKey(Category, verbose_name="カテゴリ")
     title = models.CharField(max_length=50)

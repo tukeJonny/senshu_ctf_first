@@ -32,16 +32,6 @@ class Question(object):
     def make_problem_url(self):
         return "http://example.com/{}".format(gt.generate_randstr(30))
 
-    # def getdict(self):
-    #     d = {
-    #         "category": self.category,
-    #         "title": self.title,
-    #         "description": self.description,
-    #         "solved": self.solved,
-    #         "problem_url": self.problem_url
-    #     }
-    #     return(d)
-
     def __str__(self):
         return "<Question: {category}, {title}, {description}, {solved}, {problem_url}>".format(
             category=self.category,
