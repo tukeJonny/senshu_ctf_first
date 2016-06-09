@@ -1,7 +1,7 @@
 #-*- coding: utf-8 -*-
 from django.contrib import admin
 
-from .models import Notice, Question, Category, Flag, User, AttackPointHistory, AnswerHistory
+from .models import Notice, Question, Category, Flag, Hint, User, AttackPointHistory, AnswerHistory
 
 # Register your models here.
 
@@ -23,15 +23,20 @@ class FlagInline(admin.TabularInline):
     model = Flag
     extra = 3
 
+class HintInline(admin.TabularInline):
+    model = Hint
+    extra = 1
+
 class QuestionAdmin(admin.ModelAdmin):
     fieldsets = [
         (None, {'fields': ['category', 'title']}),
-        ('The number of player who solves this problem', {'fields': ['solved']})
+        ('問題URL', {'fields': ['problem_url']}),
+        ('正解者数', {'fields': ['solved']})
     ]
-    inlines = [FlagInline]
-    list_display = ('title', 'category', 'solved')
+    inlines = [FlagInline, HintInline]
+    list_display = ('title', 'category', 'solved', 'problem_url')
     list_filter = ['solved']
-    search_fields = ['title', 'category']
+    search_fields = ['title', 'category', 'problem_url']
 
 class UserAdmin(admin.ModelAdmin):
     fieldsets = [

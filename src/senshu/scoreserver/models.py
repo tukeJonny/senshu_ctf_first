@@ -8,6 +8,9 @@ class Notice(models.Model):
     title = models.CharField(max_length=50)
     description = models.TextField(default='')
 
+    def __str__(self):
+        return "<Notice: {title}, {description}>".format(self.title, self.description)
+
 class Category(models.Model):
     """ 問題のカテゴリ """
     name = models.CharField(default='', max_length=50, unique=True)
@@ -20,7 +23,6 @@ class Question(models.Model):
     category = models.ForeignKey(Category, verbose_name="カテゴリ")
     title = models.CharField(max_length=50)
     description = models.TextField(default='')
-    #blank=Trueはどういう意味?
     solved = models.IntegerField("解いた人の数", blank=True, null=True)
     problem_url = models.CharField(max_length=50, null=True)
 
@@ -29,6 +31,14 @@ class Flag(models.Model):
     question = models.ForeignKey(Question, verbose_name="問題")
     flag = models.CharField(max_length=50)
     point = models.IntegerField("得点")
+
+class Hint(models.Model):
+    """ 問題のヒント """
+    question = models.ForeignKey(Question, verbose_name="問題")
+    description = models.TextField(default='')
+
+    def __str__(self):
+        return self.description
 
 class User(models.Model):
     """ CTFのプレイヤー """
