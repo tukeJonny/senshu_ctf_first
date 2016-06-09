@@ -1,9 +1,10 @@
+import string
 import random
 
 def generate_randstr(length):
     ret = ""
     for c in range(length):
-        ret += chr(random.randint(65, 89))
+        ret += random.choice(string.printable)
     return ret
 
 
