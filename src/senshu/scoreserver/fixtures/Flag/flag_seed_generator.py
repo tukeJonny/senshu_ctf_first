@@ -6,6 +6,7 @@ import generator_template as gt
 import pprint
 
 MODEL_NAME = 'scoreserver.flag'
+qnum = 10
 
 class Flag(object):
     def __init__(self):
@@ -15,13 +16,13 @@ class Flag(object):
 
     def make_question(self):
         #Web, Network, Binary, Forensics, Crypto
-        return random.randint(1, 10)
+        return random.randint(1, qnum-1)
 
     def make_flag(self):
         return "FLAG_IS_[{}]".format(gt.generate_randstr(15))
 
     def make_point(self):
-        return random.randint(100, 1000)
+        return random.randint(1, 11) * 100
 
     def __str__(self):
         return "<Flag: {question}, {flag}, {point}>".format(

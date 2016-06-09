@@ -36,7 +36,7 @@ class QuestionAdmin(admin.ModelAdmin):
     inlines = [FlagInline, HintInline]
     list_display = ('title', 'category', 'solved', 'problem_url')
     list_filter = ['solved']
-    search_fields = ['title', 'category', 'problem_url']
+    search_fields = ['title', 'category__name', 'problem_url']
 
 class UserAdmin(admin.ModelAdmin):
     fieldsets = [

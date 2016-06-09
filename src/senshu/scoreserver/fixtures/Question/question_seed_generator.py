@@ -6,6 +6,7 @@ import generator_template as gt
 import pprint
 
 MODEL_NAME = 'scoreserver.question'
+cnum = 6
 
 class Question(object):
     def __init__(self):
@@ -16,8 +17,7 @@ class Question(object):
         self.problem_url = self.make_problem_url()
 
     def make_category(self):
-        #Web, Network, Binary, Forensics, Crypto
-        return random.randint(1, 6)
+        return random.randint(1, cnum-1)
 
     def make_title(self):
         return gt.generate_randstr(15)
@@ -30,6 +30,9 @@ class Question(object):
 
     def make_problem_url(self):
         return "http://example.com/{}".format(gt.generate_randstr(30))
+
+    def make_hint(self):
+        pass
 
     def __str__(self):
         return "<Question: {category}, {title}, {description}, {solved}, {problem_url}>".format(

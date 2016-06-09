@@ -9,7 +9,7 @@ class Notice(models.Model):
     description = models.TextField(default='')
 
     def __str__(self):
-        return "<Notice: {title}, {description}>".format(self.title, self.description)
+        return "<Notice: {title}, {description}>".format(title=self.title, description=self.description)
 
 class Category(models.Model):
     """ 問題のカテゴリ """
