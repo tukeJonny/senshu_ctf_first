@@ -14,18 +14,21 @@ import flag_seed_generator as fsg
 import user_seed_generator as usg
 import hint_seed_generator as hsg
 
+from django.core.management.base import BaseCommand, CommandError
+
 question_num = 10
 notice_num = 10
 flag_num = 50
 user_num = 10
 hint_num = 10
 
-if __name__ == '__main__':
+def main():
     jsondata = []
 
     #qsg.cnum = 6 #fixed
     fsg.qnum = question_num
     hsg.qnum = question_num
+    #aphsg.unum = user_num
 
     #Category
     jsondata.extend(json.loads(csg.get_category_jsondata()))
@@ -41,6 +44,8 @@ if __name__ == '__main__':
     jsondata.extend(json.loads(hsg.get_hint_jsondata(hint_num)))
 
     print(jsondata)
-    with open("initial_data.json", "w") as f:
+    with open("scoreserver/fixtures/initial_data.json", "w") as f:
         f.write(json.dumps(jsondata))
 
+if __name__ == "__main__":
+    main()
