@@ -5,3 +5,17 @@ from django.views import generic
 
 class QuestionIndexView(generic.ListView):
     pass
+
+def login(request):
+    context = {}
+    return render(request, 'scoreserver/login.html', context)
+'''
+def Problems:
+  None
+
+def ScoreBoard:
+  None
+
+def ProblemDetail:
+  None
+'''
