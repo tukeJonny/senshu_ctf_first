@@ -17,6 +17,6 @@ from django.conf.urls import url, include
 from django.contrib import admin
 
 urlpatterns = [
-    url(r'scoreserver/', include('scoreserver.urls')),
+    url(r'', include('scoreserver.urls')),
     url(r'^admin/', admin.site.urls),
 ]
