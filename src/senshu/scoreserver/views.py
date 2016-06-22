@@ -7,17 +7,7 @@ class QuestionIndexView(generic.ListView):
     pass
 
 def Login(request):
-    context = {"mondai0":{
-			"title":"mondai0",
-			"main":"main0"
-			},
-		"mondai1":{
-			"title":"mondai1",
-			"main":"main1"
-			},
-		"title":"login"
-    }
-#    title="login"
+    context={"title":"login"}
     return render(request, 'scoreserver/login.html', context)
 
 def Problems(request):
@@ -25,7 +15,7 @@ def Problems(request):
     return render(request,'scoreserver/problems.html',context)
 
 def ScoreBoard(request):
-    context = {}
+    context = {"title":"scoreboard"}
     return render(request,'scoreserver/scoreboard.html',context)
 
 def ProblemDetail(request):
@@ -33,7 +23,16 @@ def ProblemDetail(request):
     return render(request,'scoreserver/problems_detail.html',context)
 
 def Web(request):
-	context={"title":"web"}
+	context = {"mondai0":{
+                        "title":"mondai0",
+                        "main":"main0"
+                        },
+                "mondai1":{
+                        "title":"mondai1",
+                        "main":"main1"
+                        },
+                "title":"web"
+    }
 	return render(request,'scoreserver/problems.html',context)
 
 def Network(request):
