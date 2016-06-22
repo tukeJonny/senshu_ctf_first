@@ -1,0 +1,49 @@
+<!DOCTYPE html>{% load staticfiles %} 
+<html lang="jp">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  {% include "scoreserver/bootstrap.html" %}
+  <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+  <script src="{% static 'js/sidebar.js' %}"></script> 
+</head>
+  {% include "scoreserver/sidebar.html" %} 
+<body>
+<div class="main">
+<!--  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Rank</th>
+        <th>Country</th>
+        <th>GDP/Capita($)</th>
+        <th>Source</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td>Lexumbourg</td>
+        <td>91,388</td>
+        <td>IMF</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>Macau</td>
+        <td>87,765</td>
+        <td>World Bank</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>Qatar</td>
+        <td>83,460</td>
+        <td>CIA</td>
+      </tr>
+    </tbody>
+  </table>
+--!>
+</div>
+</body>
+</html>
