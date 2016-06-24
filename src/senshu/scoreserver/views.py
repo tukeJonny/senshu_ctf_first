@@ -1,18 +1,14 @@
 #-*- coding: utf-8 -*-
 
+from django.utils import timezone
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.views import generic
+from django.views import generic
+from .models import Question
 # Create your views here.
 
-def index(request):
-    context = {}
-    return render(request, 'scoreserver/index.html', context)
 
-class QuestionIndexView(generic.ListView):
-    pass
-
-<<<<<<< HEAD
 
 #Todos
 #インデックスページ作成
@@ -22,10 +18,15 @@ class QuestionIndexView(generic.ListView):
 
 #Memos
 #@login_requiredデコレータをつけることで、認証が必要なビューを定義できる
-=======
 def Login(request):
     context={"title":"login"}
     return render(request, 'scoreserver/login.html', context)
+
+class QuestionListView(generic.ListView):
+    template_name = 'scoreserver/problems.html' #should modify problems.html -> questions.html
+    context_object_name = 'questions'
+    def get_queryset(self):
+        return Question.objects.all
 
 def Problems(request):
     context = {}
@@ -71,4 +72,3 @@ def Reversing(request):
 def Misc(request):
 	context={"title":"misc"}
 	return render(request,'scoreserver/problems.html',context)
->>>>>>> 577aa219e030eb49abe1e50a30897a1aa18daf90

@@ -4,7 +4,7 @@ sys.path.append('../') # for generator_template
 import os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "senshu.settings")
 
-from senshu.models import*
+from scoreserver.models import*
 
 import json
 import random
@@ -44,9 +44,9 @@ def get_attackpointhistory_jsondata(NUM):
     print("*"*20 + " Attack Point History " + "*"*20)
     fixture_list = []
     for pk in range(NUM):
-        f = Flag()
-        flag = gt.create_seeddict(MODEL_NAME, pk, **f.__dict__)
-        fixture_list.append(flag)
+        a = AttackPointHistory()
+        attackpointhistory = gt.create_seeddict(MODEL_NAME, pk, **a.__dict__)
+        fixture_list.append(attackpointhistory)
     jsondata = json.dumps(fixture_list)
     pprint.pprint(jsondata)
     print("*"*20 + " Finish! " + "*"*20 + "\n")
@@ -54,4 +54,4 @@ def get_attackpointhistory_jsondata(NUM):
 
 if __name__ == "__main__":
     pass
-    get_attackpointhistory_jsondata()
+    #get_attackpointhistory_jsondata()
