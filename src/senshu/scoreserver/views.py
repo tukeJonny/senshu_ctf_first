@@ -23,7 +23,7 @@ def Login(request):
     return render(request, 'scoreserver/login.html', context)
 
 class QuestionListView(generic.ListView):
-    template_name = 'scoreserver/problems.html' #should modify problems.html -> questions.html
+    template_name = 'scoreserver/questions.html' #should modify problems.html -> questions.html
     context_object_name = 'questions'
     def get_queryset(self):
         return Question.objects.all
