@@ -17,7 +17,7 @@ class Question(object):
         self.problem_url = self.make_problem_url()
 
     def make_category(self):
-        return random.randint(1, cnum-1)
+        return random.randint(1, cnum)
 
     def make_title(self):
         return "Question_title:"+gt.generate_randstr(15)

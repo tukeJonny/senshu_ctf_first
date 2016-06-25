@@ -10,16 +10,16 @@ import generator_template as gt
 MODEL_NAME = 'scoreserver.user'
 
 class User(object):
-    def __init__(self):
-        self.username = self.make_username()
-        self.password = self.make_password()
+    def __init__(self, pk):
+        self.username = self.make_username(pk)
+        self.password = self.make_password(pk)
 
-    def make_username(self):
+    def make_username(self, pk):
         #Web, Network, Binary, Forensics, Crypto
-        return "User_name:"+gt.generate_randstr(5)
+        return "user{}".format(pk)
 
-    def make_password(self):
-        return hashlib.sha256(gt.generate_randstr(15).encode("utf-8")).hexdigest()
+    def make_password(self, pk):
+        return hashlib.sha256("password{}".format(pk).encode("utf-8")).hexdigest()
 
     def __str__(self):
         return "<User: {username}, {password}>".format(
@@ -31,7 +31,7 @@ def get_user_jsondata(NUM):
     print("*"*20 + " User " + "*"*20)
     fixture_list = []
     for pk in range(NUM):
-        u = User()
+        u = User(pk)
         user = gt.create_seeddict(MODEL_NAME, pk, **u.__dict__)
         fixture_list.append(user)
     jsondata = json.dumps(fixture_list)

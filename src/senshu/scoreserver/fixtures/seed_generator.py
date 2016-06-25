@@ -31,7 +31,7 @@ answer_history_num = 300
 def main():
     jsondata = []
 
-    qsg.cnum = 6 #fixed
+    qsg.cnum = 6 #fix
     fsg.qnum = question_num
     hsg.qnum = question_num
     aphsg.unum = user_num
