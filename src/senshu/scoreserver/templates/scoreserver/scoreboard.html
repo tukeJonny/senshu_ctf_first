@@ -6,6 +6,24 @@
 </head>
 <body>
 <div class="main">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Rank</th>
+        <th>Username</th>
+        <th>Points</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for user in users %}
+      <tr>
+        <th>{{ forloop.counter }}</th>
+        <th>{{ user.username }}</th>
+        <th>{{ user.point }}</th>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
 <!--  <table class="table table-striped">
     <thead>
       <tr>
@@ -36,7 +54,7 @@
       </tr>
     </tbody>
   </table>
---!>
+!-->
 </div>
 </body>
 </html>

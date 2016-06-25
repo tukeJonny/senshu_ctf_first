@@ -16,7 +16,7 @@ class User(object):
 
     def make_username(self):
         #Web, Network, Binary, Forensics, Crypto
-        return gt.generate_randstr(5)
+        return "User_name:"+gt.generate_randstr(5)
 
     def make_password(self):
         return hashlib.sha256(gt.generate_randstr(15).encode("utf-8")).hexdigest()

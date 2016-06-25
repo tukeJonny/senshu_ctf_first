@@ -20,10 +20,10 @@ class Question(object):
         return random.randint(1, cnum-1)
 
     def make_title(self):
-        return gt.generate_randstr(15)
+        return "Question_title:"+gt.generate_randstr(15)
 
     def make_description(self):
-        return gt.generate_randstr(100)
+        return "Question_desc:"+gt.generate_randstr(100)
 
     def make_solved(self):
         return random.randint(0, 20)

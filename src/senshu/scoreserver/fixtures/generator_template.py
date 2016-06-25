@@ -4,7 +4,7 @@ import random
 def generate_randstr(length):
     ret = ""
     for c in range(length):
-        ret += random.choice(string.printable)
+        ret += random.choice(string.ascii_letters)
     return ret
 
 

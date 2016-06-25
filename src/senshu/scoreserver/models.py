@@ -46,6 +46,14 @@ class User(models.Model):
     password = models.CharField(max_length=128, verbose_name="パスワードハッシュ")
     is_active = models.BooleanField(default=True)
 
+    @property
+    def points(self):
+        points = 0
+        my_answer_history = AnswerHistory.objects.filter(user=self)
+        for point in map(lambda mah: mah.point, my_answer_history):
+            points += point
+        return points
+
     def set_password(self, raw_password):
         """ パスワード設定 """
         self.password = make_password(raw_password)

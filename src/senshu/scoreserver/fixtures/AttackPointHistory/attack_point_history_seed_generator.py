@@ -4,7 +4,7 @@ sys.path.append('../') # for generator_template
 import os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "senshu.settings")
 
-from scoreserver.models import*
+from scoreserver.models import Flag
 
 import json
 import random
@@ -31,7 +31,8 @@ class AttackPointHistory(object):
 
     def make_point(self):
         flags = Flag.objects.filter(question=self.question).order_by('-point')
-        return flags[0].point
+        point = flags[0].point if len(flags) > 0 else random.randint(1,10)*100
+        return point
 
     def __str__(self):
         return "<Flag: {user}, {question}, {point}>".format(

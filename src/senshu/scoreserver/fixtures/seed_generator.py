@@ -6,7 +6,7 @@ sys.path.append('Flag/')
 sys.path.append('User/')
 sys.path.append('Hint/')
 sys.path.append('AttackPointHistory/')
-sys.path.append('AnswerHistory/')
+sys.path.append('scoreserver/fixtures/AnswerHistory/')
 import json
 
 import question_seed_generator as qsg

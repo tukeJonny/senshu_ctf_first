@@ -28,7 +28,7 @@ class AnswerHistory(object):
         return random.randint(1, unum-1)
 
     def make_submit_flag(self):
-        return "FLAG_IS_{}".format(gt.generate_randstr())
+        return "FLAG_IS_{}".format(gt.generate_randstr(15))
 
     def __str__(self):
         return "<Flag: {user}, {question}, {point}>".format(
