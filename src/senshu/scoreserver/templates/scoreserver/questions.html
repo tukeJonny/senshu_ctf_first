@@ -1,0 +1,15 @@
+<!DOCTYPE html>{% load staticfiles %}
+<html lang="jp">
+<head>
+  {% include "scoreserver/head.html" %}
+  {% include "scoreserver/bootstrap.html" %}
+  {% include "scoreserver/sidebar.html" %}
+</head>
+<body>
+<div class="main">
+{% for question in questions %}
+  <p>{{ question.title }}</p><br />
+{% endfor %}
+</div>
+</body>
+</html>
