@@ -28,10 +28,6 @@ class QuestionListView(generic.ListView):
     def get_queryset(self):
         return Question.objects.all
 
-# def Problems(request):
-#     context = {}
-#     return render(request,'scoreserver/problems.html',context)
-
 class ScoreBoardView(generic.TemplateView):
     template_name = "scoreserver/scoreboard.html"
 
@@ -65,6 +61,7 @@ class CategoryTemplateView(generic.TemplateView):
                 point = flag[0].point
             points.append(point)
         return(zip(questions, points))
+
 
 class WebView(CategoryTemplateView):
     template_name = "scoreserver/question.html"
