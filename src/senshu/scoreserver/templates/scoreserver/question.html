@@ -1,11 +1,3 @@
-<!-- this is test file. after tukejonny's test finished, this file will be removed. !-->
-<!-- model fields here.
-category = models.ForeignKey(Category, verbose_name="カテゴリ")
-title = models.CharField(max_length=50)
-description = models.TextField(default='')
-solved = models.IntegerField("解いた人の数", blank=True, null=True)
-problem_url = models.CharField(max_length=50, null=True)
-!-->
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,6 +15,7 @@ problem_url = models.CharField(max_length=50, null=True)
             <th>Title</th>
             <th>Solved</th>
             <th>Point</th>
+            <th>Detail</th>
         </tr>
         </thead>
         <tbody>
@@ -31,6 +24,7 @@ problem_url = models.CharField(max_length=50, null=True)
             <th>{{ question.title }}</th>
             <th>{{ question.solved }}</th>
             <th>{{ point }}</th>
+            <th><a href="{% url 'scoreserver:question_detail' question.id %}">go detail</a></th>
         </tr>
         {% endfor %}
         </tbody>

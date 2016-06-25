@@ -27,14 +27,12 @@ problem_url = models.CharField(max_length=50, null=True)
         </tr>
         </thead>
         <tbody>
-        {% for webq in web_questions %}
         <tr>
-            <th>{{ webq.title }}</th>
-            <th>{{ webq.description }}</th>
-            <th>{{ webq.solved }}</th>
-            <th>{{ webq.problem_url }}</th>
+            <th>{{ question.title }}</th>
+            <th>{{ question.description }}</th>
+            <th>{{ question.solved }}</th>
+            <th><a href="{{ question.problem_url }}">problem url</a></th>
         </tr>
-        {% endfor %}
         </tbody>
     </table>
 </div>

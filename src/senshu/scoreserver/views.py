@@ -39,32 +39,24 @@ class ScoreBoardView(generic.TemplateView):
         context = super(ScoreBoardView, self).get_context_data(**kwargs)
         context["title"] = "scoreboard"
         context["users"] = User.objects.all().order_by('-points')
-        import pdb; pdb.set_trace()
-        #print("Pass: ")
-        #print(context)
         return context
 
-# def ScoreBoard(request):
-#     context = {"title":"scoreboard"}
-#     return render(request,'scoreserver/scoreboard.html',context)
-
 class QuestionDetailView(generic.DetailView):
-    template_name = "scoreserver/question.html"
-    queryset = Question.objects.all
+    template_name = "scoreserver/question_detail.html"
+    queryset = Question.objects.all()
     context_object_name = "question"
 
-
-# def ProblemDetail(request):
-#     context={}
-#     return render(request,'scoreserver/problems_detail.html',context)
-
-class WebView(generic.TemplateView):
-    template_name = "scoreserver/web.html"
-    model = Question
     def get_context_data(self, **kwargs):
-        context = super(WebView, self).get_context_data(**kwargs)
-        context["title"] = "Web"
-        questions = Question.objects.filter(category__name="Web") #配列
+        context = super(QuestionDetailView, self).get_context_data(**kwargs)
+        context['title'] = "Question Detail"
+        return context
+
+#基底クラス
+class CategoryTemplateView(generic.TemplateView):
+    model = Question
+    def get_zipped_context_data(self, category):
+        """ categoryのquestionsと、それに対応付いたpointsをzipで固めて返す """
+        questions = Question.objects.filter(category__name=category) #配列
         points = []
         for question in questions:
             point = -1
@@ -72,86 +64,53 @@ class WebView(generic.TemplateView):
             if len(flag) > 0:
                 point = flag[0].point
             points.append(point)
-        context['zipped_questions_points'] = zip(questions, points)
+        return(zip(questions, points))
+
+class WebView(CategoryTemplateView):
+    template_name = "scoreserver/question.html"
+    def get_context_data(self, **kwargs):
+        context = super(WebView, self).get_context_data(**kwargs)
+        context["title"] = "Web"
+        context['zipped_questions_points'] = self.get_zipped_context_data("Web")
         return context
 
-class WebDetailView(generic.DetailView):
-    template_name = "scoreserver/web_detail.html"
-    model = Question
-# def Web(request):
-# 	context = {"mondai0":{
-#                         "title":"mondai0",
-#                         "main":"main0"
-#                         },
-#                 "mondai1":{
-#                         "title":"mondai1",
-#                         "main":"main1"
-#                         },
-#                 "title":"web"
-#     }
-# 	return render(request,'scoreserver/problems.html',context)
-
-class NetworkView(generic.TemplateView):
-    template_name = "scoreserver/network.html"
-    model = Question
+class NetworkView(CategoryTemplateView):
+    template_name = "scoreserver/question.html"
     def get_context_data(self, **kwargs):
         context = super(NetworkView, self).get_context_data(**kwargs)
         context["title"] = "Network"
-        context['network_questions'] = Question.objects.filter(category__name="Network") #配列
+        context['zipped_questions_points'] = self.get_zipped_context_data("Network")
         return context
 
-# def Network(request):
-# 	context={"title":"network"}
-# 	return render(request,'scoreserver/problems.html',context)
-
-class CryptoView(generic.TemplateView):
-    template_name = "scoreserver/crypto.html"
-    model = Question
+class CryptoView(CategoryTemplateView):
+    template_name = "scoreserver/question.html"
     def get_context_data(self, **kwargs):
-        context = super(WebView, self).get_context_data(**kwargs)
+        context = super(CryptoView, self).get_context_data(**kwargs)
         context["title"] = "Crypto"
-        context['crypto_questions'] = Question.objects.filter(category__name="Crypto") #配列
+        context['zipped_questions_points'] = self.get_zipped_context_data("Crypto")
         return context
 
-# def Crypt(request):
-# 	context={"title":"crypt"}
-# 	return render(request,'scoreserver/problems.html',context)
-
-class ForensicsView(generic.TemplateView):
-    template_name = "scoreserver/forensics.html"
-    model = Question
+class ForensicsView(CategoryTemplateView):
+    template_name = "scoreserver/question.html"
     def get_context_data(self, **kwargs):
         context = super(ForensicsView, self).get_context_data(**kwargs)
         context["title"] = "Forensics"
-        context['forensics_questions'] = Question.objects.filter(category__name="Forensics") #配列
+        context['zipped_questions_points'] = self.get_zipped_context_data("Forensics")
         return context
 
-# def Forensics(request):
-# 	context={"title":"forensics"}
-# 	return render(request,'scoreserver/problems.html',context)
-
-class BinaryView(generic.TemplateView):
-    template_name = "scoreserver/binary.html"
-    model = Question
+class BinaryView(CategoryTemplateView):
+    template_name = "scoreserver/question.html"
     def get_context_data(self, **kwargs):
         context = super(BinaryView, self).get_context_data(**kwargs)
         context["title"] = "Binary"
-        context['binary_questions'] = Question.objects.filter(category__name="Binary") #配列
+        context['zipped_questions_points'] = self.get_zipped_context_data("Binary")
         return context
 
-# def Reversing(request):
-# 	context={"title":"reversing"}
-# 	return render(request,'scoreserver/problems.html',context)
-
-class MiscView(generic.TemplateView):
-    template_name = "scoreserver/misc.html"
-    model = Question
+class MiscView(CategoryTemplateView):
+    template_name = "scoreserver/question.html"
     def get_context_data(self, **kwargs):
         context = super(MiscView, self).get_context_data(**kwargs)
         context["title"] = "Misc"
-        context['misc_questions'] = Question.objects.filter(category__name="Misc") #配列
+        context['zipped_questions_points'] = self.get_zipped_context_data("Misc")
         return context
 
-# def Misc(request):
-# 	context={"title":"misc"}
-# 	return render(request,'scoreserver/problems.html',context)

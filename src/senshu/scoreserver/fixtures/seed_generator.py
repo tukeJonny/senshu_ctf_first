@@ -20,13 +20,13 @@ import answer_history_seed_generator as ahsg
 
 from django.core.management.base import BaseCommand, CommandError
 
-question_num = 10
-notice_num = 10
-flag_num = 50
-user_num = 10
-hint_num = 10
-attack_point_history_num = 10
-answer_history_num = 10
+question_num = 50
+notice_num = 50
+flag_num = 200
+user_num = 50
+hint_num = 50
+attack_point_history_num = 300
+answer_history_num = 300
 
 def main():
     jsondata = []
