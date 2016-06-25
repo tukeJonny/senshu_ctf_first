@@ -39,6 +39,8 @@ class ScoreBoardView(generic.TemplateView):
         context = super(ScoreBoardView, self).get_context_data(**kwargs)
         context["title"] = "scoreboard"
         context["users"] = User.objects.all().order_by('-point')
+        #print("Pass: ")
+        #print(context)
         return context
 
 # def ScoreBoard(request):

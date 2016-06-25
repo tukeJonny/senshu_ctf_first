@@ -3,13 +3,13 @@ from django.db import models
 from django.contrib.auth.hashers import make_password, check_password
 
 # Create your models here.
-class Notice(models.Model):
-    """ CTF中のお知らせなど """
-    title = models.CharField(max_length=50)
-    description = models.TextField(default='')
-
-    def __str__(self):
-        return "<Notice: {title}, {description}>".format(title=self.title, description=self.description)
+# class Notice(models.Model):
+#     """ CTF中のお知らせなど """
+#     title = models.CharField(max_length=50)
+#     description = models.TextField(default='')
+#
+#     def __str__(self):
+#         return "<Notice: {title}, {description}>".format(title=self.title, description=self.description)
 
 class Category(models.Model):
     """ 問題のカテゴリ """
@@ -45,14 +45,15 @@ class User(models.Model):
     username = models.CharField(default='', max_length=50)
     password = models.CharField(max_length=128, verbose_name="パスワードハッシュ")
     is_active = models.BooleanField(default=True)
-
-    @property
-    def points(self):
+    def _get_points(self):
+        print("Calculating points....")
         points = 0
         my_answer_history = AnswerHistory.objects.filter(user=self)
         for point in map(lambda mah: mah.point, my_answer_history):
             points += point
         return points
+    points = property(_get_points, doc="point is calculated dynamically.")
+
 
     def set_password(self, raw_password):
         """ パスワード設定 """

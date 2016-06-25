@@ -1,16 +1,16 @@
 #-*- coding: utf-8 -*-
 from django.contrib import admin
 
-from .models import Notice, Question, Category, Flag, Hint, User, AttackPointHistory, AnswerHistory
+from .models import Question, Category, Flag, Hint, User, AttackPointHistory, AnswerHistory #, Notice
 
 # Register your models here.
 
-class NoticeAdmin(admin.ModelAdmin):
-    fieldsets = [
-        (None, {'fields': ['title', 'description']})
-    ]
-    list_display = ('title', 'description')
-    search_fields = ['title']
+# class NoticeAdmin(admin.ModelAdmin):
+#     fieldsets = [
+#         (None, {'fields': ['title', 'description']})
+#     ]
+#     list_display = ('title', 'description')
+#     search_fields = ['title']
 
 class CategoryAdmin(admin.ModelAdmin):
     fieldsets = [
@@ -61,7 +61,7 @@ class AnswerHistoryAdmin(admin.ModelAdmin):
         ("提出フラグ", {'fields': ['submit_flag']})
     ]
 
-admin.site.register(Notice, NoticeAdmin)
+#admin.site.register(Notice, NoticeAdmin)
 admin.site.register(Question, QuestionAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(User, UserAdmin)
