@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.views import generic
 from django.views import generic
-from .models import Question, User
+from .models import Question, User, Flag
 # Create your views here.
 
 
@@ -64,9 +64,20 @@ class WebView(generic.TemplateView):
     def get_context_data(self, **kwargs):
         context = super(WebView, self).get_context_data(**kwargs)
         context["title"] = "Web"
-        context['web_questions'] = Question.objects.filter(category__name="Web") #配列
+        questions = Question.objects.filter(category__name="Web") #配列
+        points = []
+        for question in questions:
+            point = -1
+            flag = Flag.objects.filter(question=question)
+            if len(flag) > 0:
+                point = flag[0].point
+            points.append(point)
+        context['zipped_questions_points'] = zip(questions, points)
         return context
 
+class WebDetailView(generic.DetailView):
+    template_name = "scoreserver/web_detail.html"
+    model = Question
 # def Web(request):
 # 	context = {"mondai0":{
 #                         "title":"mondai0",

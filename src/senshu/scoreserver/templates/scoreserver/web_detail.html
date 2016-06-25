@@ -1,0 +1,42 @@
+<!-- this is test file. after tukejonny's test finished, this file will be removed. !-->
+<!-- model fields here.
+category = models.ForeignKey(Category, verbose_name="カテゴリ")
+title = models.CharField(max_length=50)
+description = models.TextField(default='')
+solved = models.IntegerField("解いた人の数", blank=True, null=True)
+problem_url = models.CharField(max_length=50, null=True)
+!-->
+<!DOCTYPE html>
+<html>
+<head>
+    {% include "scoreserver/bootstrap.html" %}
+    {% include "scoreserver/head.html" %}
+    {% include "scoreserver/sidebar.html" %}
+    <meta charset="utf-8"/>
+    <title>{{ title }}</title>
+</head>
+<body>
+<div class="main">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Solved</th>
+            <th>Problem URL</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for webq in web_questions %}
+        <tr>
+            <th>{{ webq.title }}</th>
+            <th>{{ webq.description }}</th>
+            <th>{{ webq.solved }}</th>
+            <th>{{ webq.problem_url }}</th>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
