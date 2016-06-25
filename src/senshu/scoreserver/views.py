@@ -38,7 +38,8 @@ class ScoreBoardView(generic.TemplateView):
     def get_context_data(self, **kwargs):
         context = super(ScoreBoardView, self).get_context_data(**kwargs)
         context["title"] = "scoreboard"
-        context["users"] = User.objects.all().order_by('-point')
+        context["users"] = User.objects.all().order_by('-points')
+        import pdb; pdb.set_trace()
         #print("Pass: ")
         #print(context)
         return context

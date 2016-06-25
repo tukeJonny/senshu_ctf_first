@@ -42,18 +42,22 @@ class Hint(models.Model):
 
 class User(models.Model):
     """ CTFのプレイヤー """
+    class Meta:
+        ordering = ("-points",)
+
     username = models.CharField(default='', max_length=50)
     password = models.CharField(max_length=128, verbose_name="パスワードハッシュ")
     is_active = models.BooleanField(default=True)
-    def _get_points(self):
+    points = models.IntegerField(default=0)
+
+    def update_points(self):
+        """pointsの更新"""
         print("Calculating points....")
         points = 0
         my_answer_history = AnswerHistory.objects.filter(user=self)
         for point in map(lambda mah: mah.point, my_answer_history):
             points += point
         return points
-    points = property(_get_points, doc="point is calculated dynamically.")
-
 
     def set_password(self, raw_password):
         """ パスワード設定 """
