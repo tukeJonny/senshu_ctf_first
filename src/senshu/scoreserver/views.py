@@ -1,14 +1,18 @@
 #-*- coding: utf-8 -*-
 
 from django.utils import timezone
-from django.shortcuts import render
+from django.core.urlresolvers import reverse
+from django.shortcuts import render, HttpResponseRedirect
 from django.http import HttpResponse
 from django.views import generic
 from django.views import generic
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.template.context import RequestContext
 from .models import Question, User, Flag
+import pprint
 # Create your views here.
-
-
 
 #Todos
 #インデックスページ作成
@@ -18,11 +22,44 @@ from .models import Question, User, Flag
 
 #Memos
 #@login_requiredデコレータをつけることで、認証が必要なビューを定義できる
-def Login(request):
-    context={"title":"login"}
+def index(request):
+    context = {}
+    if request.method == "GET":
+        print("index: GET Detect")
+    return render(request, 'scoreserver/index.html', context)
+
+def login_view(request):
+    context=RequestContext(request, {})
+    user = None
+    print(request.method)
+    if request.POST:
+        username = request.POST["username"]
+        password = request.POST["password"]
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                return HttpResponseRedirect(reverse('scoreserver:index'))
+            else:
+                context['is_inactive'] = True
+        else:
+            print("Login failed.")
+            context['login_failed'] = True
+    context['title'] = {"title":"login"}
+    context['request'] = request
+    context['user'] = user
     return render(request, 'scoreserver/login.html', context)
 
-class QuestionListView(generic.ListView):
+def logout_view(request):
+    template_name = "scoreserver/logout.html"
+    pprint.pprint(request.__dict__)
+    logout(request)
+    return render(request, template_name, {"logout": True})
+
+
+class QuestionListView(LoginRequiredMixin, generic.ListView):
+    #login_url = 'scoreserver/login'
+    #redirect_field_name = 'scoreserver/index'
     template_name = 'scoreserver/questions.html' #should modify problems.html -> questions.html
     context_object_name = 'questions'
     def get_queryset(self):

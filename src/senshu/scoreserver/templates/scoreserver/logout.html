@@ -1,7 +1,13 @@
-{% extends "scoreserver/base.html" %}
-
-{% block title %}ログアウト{% endblock title %}
-
-{% block content %}
-    <h3 class="page-header">ログアウトしました。</h3>
-{% endblock content %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>ログアウト</title>
+    </head>
+    <body onload="setTimeout(function(){location.href='{% url 'scoreserver:index' %}';}, 3000);">
+    {% if logout %}
+        <h3 class="page-header">ログアウトしました。</h3>
+    {% else %}
+        <h3 class="page-header">ログアウトできませんでした。</h3>
+    {% endif %}
+    </body>
+</html>

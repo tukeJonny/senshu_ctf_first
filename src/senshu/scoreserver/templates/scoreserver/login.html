@@ -7,10 +7,16 @@
 </head>
 <body>
   <div class="wrapper">
-    <form class="form-signin">       
+    <form class="form-signin" method="post" action="{% url 'scoreserver:login' %}">
+      {% if login_failed %}
+        <strong style="color:red;">Your Username or Password didn't match!! Please try again.</strong>
+      {% endif %}
+      {% if is_inactive %}
+        <strong style="color:red;">Your user account is inactive.</strong>
+      {% endif %}
       <h2 class="form-signin-heading">Please login</h2>
-      <input type="text" class="form-control" name="username" placeholder="Email Address" required="" autofocus="" />
-      <input type="password" class="form-control" name="password" placeholder="Password" required=""/>      
+      <input type="text" class="form-control" name="username" placeholder="Username" required="" autofocus="" />
+      <input type="password" class="form-control" name="password" placeholder="Password" required=""/>
       <label class="checkbox">
         <input type="checkbox" value="remember-me" id="rememberMe" name="rememberMe"> Remember me
       </label>

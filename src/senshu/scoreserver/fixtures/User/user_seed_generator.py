@@ -1,13 +1,13 @@
 import sys
 sys.path.append('../')
 import json
-import hashlib
+from django.contrib.auth import hashers as hashers
 
 import pprint
 
 import generator_template as gt
 
-MODEL_NAME = 'scoreserver.user'
+MODEL_NAME = 'auth.user'
 
 class User(object):
     def __init__(self, pk):
@@ -19,7 +19,7 @@ class User(object):
         return "user{}".format(pk)
 
     def make_password(self, pk):
-        return hashlib.sha256("password{}".format(pk).encode("utf-8")).hexdigest()
+        return hashers.make_password("password{}".format(pk))
 
     def __str__(self):
         return "<User: {username}, {password}>".format(

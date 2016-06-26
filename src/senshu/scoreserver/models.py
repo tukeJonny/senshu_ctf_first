@@ -1,6 +1,7 @@
 #-*- coding: utf-8 -*-
 from django.db import models
 from django.contrib.auth.hashers import make_password, check_password
+from django.contrib.auth.models import AbstractBaseUser
 
 # Create your models here.
 # class Notice(models.Model):
@@ -40,15 +41,21 @@ class Hint(models.Model):
     def __str__(self):
         return self.description
 
-class User(models.Model):
+class User(AbstractBaseUser):
     """ CTFのプレイヤー """
     class Meta:
-        ordering = ("-points",)
+        ordering = ("points",)
 
     username = models.CharField(default='', max_length=50)
-    password = models.CharField(max_length=128, verbose_name="パスワードハッシュ")
+    #password = models.CharField(max_length=128, verbose_name="パスワードハッシュ")
     is_active = models.BooleanField(default=True)
     points = models.IntegerField(default=0)
+
+    USERNAME_FIELD = 'username'
+    #PASSWORD_FIELD = 'password'
+
+    def __unicode__(self):
+        return self.username
 
     def update_points(self):
         """pointsの更新"""
@@ -64,6 +71,8 @@ class User(models.Model):
         self.password = make_password(raw_password)
 
     def check_password(self, raw_password):
+        print("Authenticating...")
+        #import pdb; pdb.set_trace()
         """ 生パスワードのチェック """
         def setter(raw_password):
             """ パスワード更新 """

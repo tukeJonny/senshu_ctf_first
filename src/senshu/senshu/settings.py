@@ -102,6 +102,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+LOGIN_URL = 'scoreserver/login'
+
 INSTALLED_APPS += ('debug_toolbar',)
 def callback_for_toolbar(request):
     return True
