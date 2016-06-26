@@ -9,6 +9,27 @@
 </head>
 <body>
 <div class="main">
+{% for question ,point in zipped_questions_points %}
+<div class="panel panel-default">
+  <div class="panel-heading clearfix">
+    <h3 class="panel-title pull-left">{{ question.title }}</h3>
+      <a class="btn pull-right" href="#">
+	<i style="font-size:2em" class="material-icons">pageview</i>
+      </a>
+    </div>
+    <div class="list-group">
+      <div class="list-group-item">
+        <h4 class="list-group-item-heading">Solved</h4>
+	<p class="list-group-item-text">{{ question.solved }}</p>
+      </div>
+      <div class="list-group-item">
+	<h4 class="list-group-item-heading">Point</h4>
+        <p class="list-group-item-text">{{ point }}</p>
+      </div>
+    </div>
+</div>
+{% endfor %}
+<!--
     <table class="table table-striped">
         <thead>
         <tr>
@@ -29,6 +50,7 @@
         {% endfor %}
         </tbody>
     </table>
+-->
 </div>
 </body>
 </html>
