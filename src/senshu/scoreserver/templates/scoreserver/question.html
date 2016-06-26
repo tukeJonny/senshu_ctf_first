@@ -4,13 +4,14 @@
     {% include "scoreserver/bootstrap.html" %}
     {% include "scoreserver/head.html" %}
     {% include "scoreserver/sidebar.html" %}
+    {% include "scoreserver/bootcard.html" %}
     <meta charset="utf-8"/>
     <title>{{ title }}</title>
 </head>
 <body>
 <div class="main">
 {% for question ,point in zipped_questions_points %}
-<div class="panel panel-default">
+<div class="panel panel-default col-xs-6 col-sm-4">
   <div class="panel-heading clearfix">
     <h3 class="panel-title pull-left">{{ question.title }}</h3>
       <a class="btn pull-right" href="#">
