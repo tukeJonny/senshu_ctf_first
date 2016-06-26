@@ -1,29 +1,10 @@
 @import "bootcards.scss";
 
 body {
-	padding-top: 80px;
+	//padding-top: 80px;
 	background: #f5f5f5;
 }
 
-
-/* NAVBAR */
-
-.navbar {
-  .navbar-brand {
-  	font-weight: bold;
-  	color: #333;
-  }
-  
-  .btn i {
-	  vertical-align: 0;
-  }
-
-  .btn-back,
-  .btn-menu,
-  button[data-toggle="offcanvas"] {
-      display: none !important;
-  }
-}
 
 
 /* NAVBAR WITH 2 LINES OF LINKS (DESKTOP ONLY) */
