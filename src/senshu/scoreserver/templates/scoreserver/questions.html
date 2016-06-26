@@ -4,12 +4,14 @@
   {% include "scoreserver/head.html" %}
   {% include "scoreserver/bootstrap.html" %}
   {% include "scoreserver/sidebar.html" %}
+  <link rel="stylesheet" href="{% static 'css/questions.css' %}">
 </head>
 <body>
 <div class="main">
-{% for question in questions %}
-  <p>{{ question.title }}</p><br />
-{% endfor %}
+	<h1>{{title}}</h1>
+		{% for question in questions %}
+			<h2>{{question.title}}</h2>
+		{% endfor %}
 </div>
 </body>
 </html>
