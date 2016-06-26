@@ -1,11 +1,12 @@
 #-*- coding: utf-8 -*-
 
 from django.utils import timezone
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.shortcuts import render, HttpResponseRedirect
 from django.http import HttpResponse
 from django.views import generic
 from django.views import generic
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -14,11 +15,19 @@ from .models import Question, User, Flag
 import pprint
 # Create your views here.
 
+#競技中に行われ無いような操作は<Option>
 #Todos
 #インデックスページ作成
 #問題一覧作成
 #問題詳細画面作成(フラグ提出フォームがある)
 #ランキング画面作成(Userの獲得ポイントを元に並べてやればおk
+#ユーザ登録(CreateUserView)の作成
+#<Option>ユーザ登録情報変更(UpdateUserView)の作成
+#<Option>ユーザ削除
+#フラグが送信されたらそれを受けるCreateAnswerHistoryViewを作って、
+#フラグ判定、正解であればAttackPointHistoryを追加、ユーザのPoint計算
+#フラグ提出と同じページに飛ばしてCongraturations!って表示
+#不正解であれば、フラグ提出ページに飛ばしてWrong...って表示
 
 #Memos
 #@login_requiredデコレータをつけることで、認証が必要なビューを定義できる
@@ -73,6 +82,28 @@ class ScoreBoardView(generic.TemplateView):
         context["title"] = "scoreboard"
         context["users"] = User.objects.all().order_by('-points')
         return context
+
+class RegisterView(generic.edit.CreateView):
+    template_name = "scoreserver/register.html"
+    model = User
+    fields = ['username', 'password']
+    success_url = reverse_lazy("scoreserver:index")
+
+    def form_valid(self, form):
+        self.user = form.save()
+        self.user.save()
+        messages.success(self.request, "Saved!")
+        if self.request.user: #ログイン済みであれば
+            logout(self.request) #一旦ログアウト
+        print("Authenticate with <username:{}, password:{}> ...".format(self.user.username, self.user.password))
+        user = authenticate(username=self.user.username, password=self.user.password)
+        login(self.request, user)
+
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.warning(self.request, "Can't saved...")
+        return super().form_invalid(form)
 
 class QuestionDetailView(generic.DetailView):
     template_name = "scoreserver/question_detail.html"

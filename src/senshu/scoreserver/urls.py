@@ -5,6 +5,7 @@ from . import views
 from .views import QuestionListView
 from .views import QuestionDetailView
 from .views import ScoreBoardView, WebView, NetworkView, CryptoView, ForensicsView, BinaryView, MiscView
+from .views import RegisterView
 
 #auth_view.login, {'template_name': "scoreserver/login.html"}
 
@@ -14,6 +15,7 @@ urlpatterns = [
     url(r'^scoreserver/login/$', views.login_view, name="login"),
     url(r'^scoreserver/logout/$', views.logout_view,  name="logout"),
     url(r'^scoreserver/scoreboard/$', ScoreBoardView.as_view(), name="scoreboard"),
+    url(r'^scoreserver/register/$', RegisterView.as_view(), name="register"),
     url(r'^scoreserver/questions/$', QuestionListView.as_view(), name="questions"),
     url(r'^scoreserver/question_detail/(?P<pk>\d+)/$', QuestionDetailView.as_view(), name="question_detail"),
     url(r'^scoreserver/web/$', WebView.as_view(), name="web"),

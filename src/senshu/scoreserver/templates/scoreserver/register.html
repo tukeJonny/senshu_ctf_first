@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="jp">
+<head>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    {% include "scoreserver/head.html" %}
+</head>
+<body>
+  <div class="wrapper">
+    <form class="form-signin" method="post" action="">
+      {{ form.as_p }}
+      {% csrf_token %}
+      <input type="submit" value="Create"/>
+    </form>
+  </div>
+</body>
