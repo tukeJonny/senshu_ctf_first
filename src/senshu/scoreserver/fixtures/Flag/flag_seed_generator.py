@@ -12,15 +12,15 @@ class Flag(object):
     def __init__(self, pk):
         self.question = self.make_question(pk)
         self.point = self.make_point()
-        self.flag = self.make_flag()
+        self.flag = self.make_flag(pk)
 
     def make_question(self, pk):
         #Web, Network, Binary, Forensics, Crypto
         return pk
 
-    def make_flag(self):
+    def make_flag(self, pk):
         #return "FLAG_IS_[{}]".format(gt.generate_randstr(15))
-        return "FLAG_IS_[{}]".format(self.point)
+        return "FLAG_IS_[{}]".format(pk)
 
     def make_point(self):
         return random.randint(1, 11) * 100
@@ -41,7 +41,6 @@ def get_flag_jsondata(NUM):
         fixture_list.append(flag)
     jsondata = json.dumps(fixture_list)
     pprint.pprint(jsondata)
-    import pdb; pdb.set_trace()
     print("*"*20 + " Finish! " + "*"*20 + "\n")
     return(jsondata)
 

@@ -30,7 +30,7 @@ class Question(models.Model):
 class Flag(models.Model):
     """ 問題の答え(フラグ) """
     question = models.ForeignKey(Question, verbose_name="問題")
-    flag = models.CharField(max_length=50)
+    flag = models.CharField(max_length=50, unique=True)
     point = models.IntegerField("得点")
 
 class Hint(models.Model):
@@ -43,6 +43,7 @@ class Hint(models.Model):
 
 class UserManager(BaseUserManager):
     def create_user(self, username, password=None):
+        print("create user!")
         if not username:
             raise ValueError("Users must have username!!")
 
@@ -83,10 +84,10 @@ class User(AbstractBaseUser):
         """pointsの更新"""
         print("Calculating points....")
         points = 0
-        my_answer_history = AnswerHistory.objects.filter(user=self)
-        for point in map(lambda mah: mah.point, my_answer_history):
+        my_attack_point_history = AttackPointHistory.objects.filter(user=self)
+        for point in map(lambda mah: mah.point, my_attack_point_history):
             points += point
-        return points
+        self.points = points
 
     def set_password(self, raw_password):
         """ パスワード設定 """
@@ -94,7 +95,6 @@ class User(AbstractBaseUser):
 
     def check_password(self, raw_password):
         print("Authenticating...")
-        #import pdb; pdb.set_trace()
         """ 生パスワードのチェック """
         def setter(raw_password):
             """ パスワード更新 """

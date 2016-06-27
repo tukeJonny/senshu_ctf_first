@@ -12,9 +12,10 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.template.context import RequestContext
 from django.template.loader import get_template
-from .models import Question, Flag
+from .models import Question, Flag, AnswerHistory, AttackPointHistory
 from django.contrib.auth import get_user_model
 User = get_user_model()
+from scoreserver.helpers import FlagSubmit
 import pprint
 from django.db import connection
 
@@ -40,7 +41,6 @@ def index(request):
     context = {}
     if request.method == "GET":
         print("index: GET Detect")
-    #import pdb; pdb.set_trace()
     return render(request, 'scoreserver/index.html', context)
 
 def login_view(request):
@@ -76,10 +76,13 @@ def flag_submit_view(request, question_id):
     context['title'] = "Question Detail"
     flag = request.POST['flag']
     answer = Flag.objects.get(question=question_id).flag
+    fs = FlagSubmit(request.user, question_id, flag)
     if flag == answer:
         messages.success(request, "Congraturations! flag is correct!")
+        fs.success()
     else:
         messages.warning(request, "Oh... flag is incorrect... please try again!")
+        fs.fail()
     return HttpResponseRedirect(reverse('scoreserver:question_detail', args=(question_id,)))
 
 class QuestionListView(LoginRequiredMixin, generic.ListView):
@@ -113,7 +116,6 @@ class RegisterView(generic.edit.CreateView):
         user.set_password(password)
         user.save()
         messages.success(self.request, "Saved {}!".format(user.username))
-        import pdb; pdb.set_trace()
         if self.request.user.is_authenticated(): #ログイン済みであれば
             logout(self.request) #一旦ログアウト
         authenticated_user = authenticate(username=user.username, password=password)

@@ -18,7 +18,6 @@ class UserBackend(object):
         :param password:
         :return:
         """
-        import pdb; pdb.set_trace()
         print("Use custom authenticate backend.")
         user = None
         try:
@@ -40,7 +39,6 @@ class UserBackend(object):
 
 class AdminUserBackend(object):
     def authenticate(self, username=None, password=None):
-        import pdb; pdb.set_trace()
         print("Use custom admin authenticate backend.")
         login_valid = (settings.ADMIN_LOGIN == username)
         pwd_valid = check_password(password, settings.ADMIN_PASSWORD)

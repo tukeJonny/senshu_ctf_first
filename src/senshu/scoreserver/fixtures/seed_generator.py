@@ -25,8 +25,8 @@ notice_num = 50
 flag_num = 50
 user_num = 50
 hint_num = 50
-attack_point_history_num = 300
-answer_history_num = 300
+attack_point_history_num = 0
+answer_history_num = 0
 
 def main():
     jsondata = []
