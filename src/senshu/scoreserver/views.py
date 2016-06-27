@@ -85,7 +85,7 @@ class ScoreBoardView(LoginRequiredMixin, generic.TemplateView):
     def get_context_data(self, **kwargs):
         context = super(ScoreBoardView, self).get_context_data(**kwargs)
         context["title"] = "scoreboard"
-        context["users"] = User.objects.all().order_by('-points')
+        context["users"] = User.objects.filter(is_superuser=False, is_staff=False).order_by('-points')
         return context
 
 class RegisterView(generic.edit.CreateView):
@@ -102,10 +102,10 @@ class RegisterView(generic.edit.CreateView):
         user.set_password(password)
         user.save()
         messages.success(self.request, "Saved {}!".format(user.__dict__))
-        if self.request.user: #ログイン済みであれば
-            logout(self.request) #一旦ログアウト
         import pdb; pdb.set_trace()
-        authenticated_user = authenticate(username=user.username, password=user.password)
+        if self.request.user.is_authenticated(): #ログイン済みであれば
+            logout(self.request) #一旦ログアウト
+        authenticated_user = authenticate(username=user.username, password=password)
 
         login(self.request, authenticated_user)
 
