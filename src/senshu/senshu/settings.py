@@ -85,6 +85,8 @@ DATABASES = {
 }
 
 
+#AUTH_USER_MODEL = "scoreserver.User"
+
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
 
@@ -103,7 +105,14 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = [
+    'scoreserver.backends.UserBackend',
+]
+
+
 LOGIN_URL = 'scoreserver/login'
+AUTH_USER_MODEL = 'scoreserver.User'
+SILENCED_SYSTEM_CHECKS = ["auth.E003", "auth.W004"] #これあかんかも
 
 INSTALLED_APPS += ('debug_toolbar',)
 def callback_for_toolbar(request):
