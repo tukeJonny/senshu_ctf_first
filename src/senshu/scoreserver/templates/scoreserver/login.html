@@ -7,6 +7,7 @@
 </head>
 <body>
   <div class="wrapper">
+    {% if not user.is_authenticated %}
     <form class="form-signin" method="post" action="{% url 'scoreserver:login' %}">
       {% if login_failed %}
         <strong style="color:red;">Your Username or Password didn't match!! Please try again.</strong>
@@ -23,5 +24,12 @@
       <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
       {% csrf_token %}
     </form>
+    {% else %}
+    <strong style="color:red;">You had already logged in!!</strong>
+    <h1>{{ user }}</h1>
+    <!--<script>
+      setTimeout(function(){location.href="{% url 'scoreserver:index' %}";}, 3000);
+    </script>!-->
+    {% endif %}
   </div>
 </body>

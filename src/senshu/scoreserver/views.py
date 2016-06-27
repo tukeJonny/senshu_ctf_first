@@ -39,6 +39,7 @@ def index(request):
     context = {}
     if request.method == "GET":
         print("index: GET Detect")
+    #import pdb; pdb.set_trace()
     return render(request, 'scoreserver/index.html', context)
 
 def login_view(request):
@@ -78,7 +79,7 @@ class QuestionListView(LoginRequiredMixin, generic.ListView):
     def get_queryset(self):
         return Question.objects.all
 
-class ScoreBoardView(generic.TemplateView):
+class ScoreBoardView(LoginRequiredMixin, generic.TemplateView):
     template_name = "scoreserver/scoreboard.html"
 
     def get_context_data(self, **kwargs):
@@ -114,7 +115,7 @@ class RegisterView(generic.edit.CreateView):
         messages.warning(self.request, "Can't saved...")
         return super().form_invalid(form)
 
-class QuestionDetailView(generic.DetailView):
+class QuestionDetailView(LoginRequiredMixin, generic.DetailView):
     template_name = "scoreserver/question_detail.html"
     queryset = Question.objects.all()
     context_object_name = "question"
@@ -125,7 +126,7 @@ class QuestionDetailView(generic.DetailView):
         return context
 
 #基底クラス
-class CategoryTemplateView(generic.TemplateView):
+class CategoryTemplateView(LoginRequiredMixin, generic.TemplateView):
     model = Question
     def get_zipped_context_data(self, category):
         """ categoryのquestionsと、それに対応付いたpointsをzipで固めて返す """

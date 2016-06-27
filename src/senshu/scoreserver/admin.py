@@ -61,6 +61,8 @@ class AnswerHistoryAdmin(admin.ModelAdmin):
         (None, {'fields': ['user', 'question']}),
         ("提出フラグ", {'fields': ['submit_flag']})
     ]
+    list_display = ('user', 'question', 'submit_flag')
+    search_fields = ['user', 'question', 'submit_flag']
 
 #admin.site.register(Notice, NoticeAdmin)
 admin.site.register(Question, QuestionAdmin)

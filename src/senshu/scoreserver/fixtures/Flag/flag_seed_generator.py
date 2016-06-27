@@ -11,15 +11,16 @@ qnum = 10
 class Flag(object):
     def __init__(self):
         self.question = self.make_question()
-        self.flag = self.make_flag()
         self.point = self.make_point()
+        self.flag = self.make_flag()
 
     def make_question(self):
         #Web, Network, Binary, Forensics, Crypto
         return random.randint(1, qnum-1)
 
     def make_flag(self):
-        return "FLAG_IS_[{}]".format(gt.generate_randstr(15))
+        #return "FLAG_IS_[{}]".format(gt.generate_randstr(15))
+        return "FLAG_IS_[{}]".format(self.point)
 
     def make_point(self):
         return random.randint(1, 11) * 100
