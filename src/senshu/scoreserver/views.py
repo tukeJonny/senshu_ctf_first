@@ -59,9 +59,9 @@ def login_view(request):
         else:
             print("Login failed.")
             context['login_failed'] = True
-    context['title'] = {"title":"login"}
+    context['title'] = "login"
     context['request'] = request
-    context['user'] = user
+    context['checked_user'] = user
     return render(request, 'scoreserver/login.html', context)
 
 def logout_view(request):
