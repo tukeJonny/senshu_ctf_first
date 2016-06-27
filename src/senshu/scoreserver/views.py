@@ -2,7 +2,7 @@
 
 from django.utils import timezone
 from django.core.urlresolvers import reverse, reverse_lazy
-from django.shortcuts import render, HttpResponseRedirect
+from django.shortcuts import render, HttpResponseRedirect, redirect
 from django.http import HttpResponse
 from django.views import generic
 from django.views import generic
@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.template.context import RequestContext
+from django.template.loader import get_template
 from .models import Question, Flag
 from django.contrib.auth import get_user_model
 User = get_user_model()
@@ -70,6 +71,16 @@ def logout_view(request):
     logout(request)
     return render(request, template_name, {"logout": True})
 
+def flag_submit_view(request, question_id):
+    context = {}
+    context['title'] = "Question Detail"
+    flag = request.POST['flag']
+    answer = Flag.objects.get(question=question_id).flag
+    if flag == answer:
+        messages.success(request, "Congraturations! flag is correct!")
+    else:
+        messages.warning(request, "Oh... flag is incorrect... please try again!")
+    return HttpResponseRedirect(reverse('scoreserver:question_detail', args=(question_id,)))
 
 class QuestionListView(LoginRequiredMixin, generic.ListView):
     #login_url = 'scoreserver/login'
@@ -101,7 +112,7 @@ class RegisterView(generic.edit.CreateView):
         user.username = username
         user.set_password(password)
         user.save()
-        messages.success(self.request, "Saved {}!".format(user.__dict__))
+        messages.success(self.request, "Saved {}!".format(user.username))
         import pdb; pdb.set_trace()
         if self.request.user.is_authenticated(): #ログイン済みであれば
             logout(self.request) #一旦ログアウト
@@ -188,4 +199,5 @@ class MiscView(CategoryTemplateView):
         context["title"] = "Misc"
         context['zipped_questions_points'] = self.get_zipped_context_data("Misc")
         return context
+
 

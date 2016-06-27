@@ -22,7 +22,7 @@ from django.core.management.base import BaseCommand, CommandError
 
 question_num = 50
 notice_num = 50
-flag_num = 200
+flag_num = 50
 user_num = 50
 hint_num = 50
 attack_point_history_num = 300

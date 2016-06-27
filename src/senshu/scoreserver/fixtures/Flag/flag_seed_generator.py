@@ -9,14 +9,14 @@ MODEL_NAME = 'scoreserver.flag'
 qnum = 10
 
 class Flag(object):
-    def __init__(self):
-        self.question = self.make_question()
+    def __init__(self, pk):
+        self.question = self.make_question(pk)
         self.point = self.make_point()
         self.flag = self.make_flag()
 
-    def make_question(self):
+    def make_question(self, pk):
         #Web, Network, Binary, Forensics, Crypto
-        return random.randint(1, qnum-1)
+        return pk
 
     def make_flag(self):
         #return "FLAG_IS_[{}]".format(gt.generate_randstr(15))
@@ -36,11 +36,12 @@ def get_flag_jsondata(NUM):
     print("*"*20 + " Flag " + "*"*20)
     fixture_list = []
     for pk in range(NUM):
-        f = Flag()
+        f = Flag(pk)
         flag = gt.create_seeddict(MODEL_NAME, pk, **f.__dict__)
         fixture_list.append(flag)
     jsondata = json.dumps(fixture_list)
     pprint.pprint(jsondata)
+    import pdb; pdb.set_trace()
     print("*"*20 + " Finish! " + "*"*20 + "\n")
     return(jsondata)
 

@@ -9,19 +9,39 @@ problem_url = models.CharField(max_length=50, null=True)
 <!DOCTYPE html>
 <html>
 <head>
-    {% include "scoreserver/bootstrap.html" %}
-    {% include "scoreserver/head.html" %}
-    {% include "scoreserver/sidebar.html" %}
-    <meta charset="utf-8"/>
-    <title>{{ title }}</title>
+  {% include "scoreserver/bootstrap.html" %}
+  {% include "scoreserver/head.html" %}
+  {% include "scoreserver/sidebar.html" %}
+  <meta charset="utf-8"/>
+  <title>{{ title }}</title>
 </head>
 <body>
+<!-- 余力があったら、モーダルが欲しい(Congratzなど表示したい)
+<!– モーダルウィンドウ –>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+<h4 class="modal-title" id="myModalLabel">Modal title</h4>
+</div>
+<div class="modal-body">
+body
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+<button type="button" class="btn btn-primary">Save changes</button>
+</div>
+</div>
+</div>
+</div>
+!-->
 <div class="main">
-<div class="panel panel-default">
-  <div class="panel-heading clearfix">
-    <h3 class="panel-title pull-left">Web- {{ question.title }}</h3>
+  <div class="panel panel-default">
+    <div class="panel-heading clearfix">
+      <h3 class="panel-title pull-left">Web- {{ question.title }}</h3>
       <i class="pull-right  fa fa-unlock-alt fa-1x"> {{ question.solved }}</i>
-  </div>
+    </div>
     <div class="list-group">
       <div class="list-group-item">
         <h4 class="list-group-item-heading">Description</h4>
@@ -30,45 +50,56 @@ problem_url = models.CharField(max_length=50, null=True)
       <div class="list-group-item">
         <h4 class="list-group-item-heading">Flag</h4>
         <p class="list-group-item-text">
-          <div class="form-group">
-            <input type="text" class="form-control" placeholder="input flag">
-            <a class="btn btn-primary pull-right form-control" >
-              <i class="fa fa-flag"> Submit</i> 
-            </a>
+          {% if messages %}
+            {% for message in messages %}
+              <p>{{ message }}</p>
+              {% if Congrat in message %}
+                <p>congrat</p>
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+        <div class="form-group">
+          <form method="post" action="{% url 'scoreserver:submit' question.id %}">
+            <input type="text" class="form-control" name="flag" placeholder="input flag">
+            <input type="submit" class="btn btn-primary pull-right form-control" value="Submit">
+            <!--<i class="fa fa-flag"> Submit</i>!-->
+            </input>
             </br>
-          </div>
+            {% csrf_token %}
+          </form>
+        </div>
         </p>
         {% if question.problem_url %} <!-- file_urlが空かどうかの判定-->
-          <div class="list-group-item">
-            <h4 class="list-group-item-heading">File</h4>
-            <a class="list-group-item-text" href="{{ question.problem_url }}">{{ question.problem_url }}</a>
-          </div>
-	{% endif %}
+        <div class="list-group-item">
+          <h4 class="list-group-item-heading">File</h4>
+          <a class="list-group-item-text" href="{{ question.problem_url }}">{{ question.problem_url }}</a>
+        </div>
+        {% endif %}
       </div>
-  <div class="panel-footer">
-    <small>senshu CTF - {{ question.category.name }}</small>
+      <div class="panel-footer">
+        <small>senshu CTF - {{ question.category.name }}</small>
+      </div>
+    </div>
+    <!--
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Solved</th>
+                <th>Problem URL</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th>{{ question.title }}</th>
+                <th>{{ question.description }}</th>
+                <th>{{ question.solved }}</th>
+                <th><a href="{{ question.problem_url }}">problem url</a></th>
+            </tr>
+            </tbody>
+        </table>
+    =-->
   </div>
-</div>
-<!--
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Solved</th>
-            <th>Problem URL</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <th>{{ question.title }}</th>
-            <th>{{ question.description }}</th>
-            <th>{{ question.solved }}</th>
-            <th><a href="{{ question.problem_url }}">problem url</a></th>
-        </tr>
-        </tbody>
-    </table>
-=-->
-</div>
 </body>
 </html>

@@ -18,6 +18,7 @@ urlpatterns = [
     url(r'^scoreserver/register/$', RegisterView.as_view(), name="register"),
     url(r'^scoreserver/questions/$', QuestionListView.as_view(), name="questions"),
     url(r'^scoreserver/question_detail/(?P<pk>\d+)/$', QuestionDetailView.as_view(), name="question_detail"),
+    url(r'^scoreserver/submit/(?P<question_id>\d+)/$', views.flag_submit_view, name="submit"),
     url(r'^scoreserver/web/$', WebView.as_view(), name="web"),
     url(r'^scoreserver/network/$', NetworkView.as_view(), name="network"),
     url(r'^scoreserver/crypt/$', CryptoView.as_view(), name="crypt"),
