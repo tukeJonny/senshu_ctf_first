@@ -17,6 +17,33 @@ problem_url = models.CharField(max_length=50, null=True)
 </head>
 <body>
 <div class="main">
+<div class="panel panel-default">
+  <div class="panel-heading clearfix">
+    <h3 class="panel-title pull-left">Web- {{ question.title }}</h3>
+      <i class="pull-right  fa fa-unlock-alt fa-1x" >{{ question.solved }}</i>
+  </div>
+    <div class="list-group">
+      <div class="list-group-item">
+        <h4 class="list-group-item-heading">Description</h4>
+        <p class="list-group-item-text">{{ question.description }}</p>
+      </div>
+      <div class="list-group-item">
+        <h4 class="list-group-item-heading">Flag</h4>
+        <p class="list-group-item-text">
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="input flag">
+            <a class="btn btn-primary pull-right form-control" >
+              <i class="fa fa-pencil"></i>Submit
+            </a>
+            </br>
+          </div>
+        </p>
+      </div>
+  <div class="panel-footer">
+    <small>senshu CTF {{ question.genre }} -Web</small>
+  </div>
+</div>
+<!--
     <table class="table table-striped">
         <thead>
         <tr>
@@ -35,6 +62,7 @@ problem_url = models.CharField(max_length=50, null=True)
         </tr>
         </tbody>
     </table>
+=-->
 </div>
 </body>
 </html>
