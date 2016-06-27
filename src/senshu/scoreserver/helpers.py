@@ -19,6 +19,9 @@ class FlagSubmit(object):
         #User
         self.user.update_points()
         self.user.save()
+        #Question
+        self.question.solved += 1
+        self.question.save()
 
     def fail(self):
         #AnswerHistory

@@ -11,18 +11,18 @@ from .views import RegisterView
 
 app_name = 'scoreserver'
 urlpatterns = [
-    url(r'^scoreserver/index/$', views.index, name="index"),
-    url(r'^scoreserver/login/$', views.login_view, name="login"),
-    url(r'^scoreserver/logout/$', views.logout_view,  name="logout"),
-    url(r'^scoreserver/scoreboard/$', ScoreBoardView.as_view(), name="scoreboard"),
-    url(r'^scoreserver/register/$', RegisterView.as_view(), name="register"),
-    url(r'^scoreserver/questions/$', QuestionListView.as_view(), name="questions"),
-    url(r'^scoreserver/question_detail/(?P<pk>\d+)/$', QuestionDetailView.as_view(), name="question_detail"),
-    url(r'^scoreserver/submit/(?P<question_id>\d+)/$', views.flag_submit_view, name="submit"),
-    url(r'^scoreserver/web/$', WebView.as_view(), name="web"),
-    url(r'^scoreserver/network/$', NetworkView.as_view(), name="network"),
-    url(r'^scoreserver/crypt/$', CryptoView.as_view(), name="crypt"),
-    url(r'^scoreserver/forensics/$', ForensicsView.as_view(), name="forensics"),
-    url(r'^scoreserver/reversing/$', BinaryView.as_view(), name="reversing"),
-    url(r'^scoreserver/misc/$', MiscView.as_view(), name="misc")
+    url(r'^index/$', views.index, name="index"),
+    url(r'^login', views.login_view, name="login"),
+    url(r'^logout/$', views.logout_view,  name="logout"),
+    url(r'^scoreboard/$', ScoreBoardView.as_view(), name="scoreboard"),
+    url(r'^register/$', RegisterView.as_view(), name="register"),
+    url(r'^questions/$', QuestionListView.as_view(), name="questions"),
+    url(r'^question_detail/(?P<pk>\d+)/$', QuestionDetailView.as_view(), name="question_detail"),
+    url(r'^submit/(?P<question_id>\d+)/$', views.flag_submit_view, name="submit"),
+    url(r'^web/$', WebView.as_view(), name="web"),
+    url(r'^network/$', NetworkView.as_view(), name="network"),
+    url(r'^crypt/$', CryptoView.as_view(), name="crypt"),
+    url(r'^forensics/$', ForensicsView.as_view(), name="forensics"),
+    url(r'^reversing/$', BinaryView.as_view(), name="reversing"),
+    url(r'^misc/$', MiscView.as_view(), name="misc")
 ]
