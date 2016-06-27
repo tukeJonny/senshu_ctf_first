@@ -7,7 +7,7 @@ import pprint
 
 import generator_template as gt
 
-MODEL_NAME = 'auth.user'
+MODEL_NAME = 'scoreserver.user'
 
 class User(object):
     def __init__(self, pk):
