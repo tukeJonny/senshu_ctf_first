@@ -1,7 +1,7 @@
 #-*- coding: utf-8 -*-
 from django.db import models
 from django.contrib.auth.hashers import make_password, check_password
-from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
 # Create your models here.
 # class Notice(models.Model):
@@ -41,18 +41,37 @@ class Hint(models.Model):
     def __str__(self):
         return self.description
 
+class UserManager(BaseUserManager):
+    def create_user(self, username, password=None):
+        if not username:
+            raise ValueError("Users must have username!!")
+
+        user = self.model(username=BaseUserManager.normalize_username(username))
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, username, password):
+        u = self.create_user(email, password=password)
+        u.is_admin = True
+        u.save(using=self._db)
+        return(u)
+
 class User(AbstractBaseUser):
     """ CTFのプレイヤー """
     class Meta:
         ordering = ("points",)
+        db_table = 'scoreserver_user'
 
-    username = models.CharField(default='', max_length=50)
+    username = models.CharField(default='', max_length=50) #システムエラー回避のためunique=Trueを指定
     #password = models.CharField(max_length=128, verbose_name="パスワードハッシュ")
     is_active = models.BooleanField(default=True)
     points = models.IntegerField(default=0)
 
     USERNAME_FIELD = 'username'
     #PASSWORD_FIELD = 'password'
+
+    objects = UserManager()
 
     def __unicode__(self):
         return self.username

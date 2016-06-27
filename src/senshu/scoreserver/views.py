@@ -11,8 +11,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.template.context import RequestContext
-from .models import Question, User, Flag
+from .models import Question, Flag
+from django.contrib.auth import get_user_model
+User = get_user_model()
 import pprint
+from django.db import connection
+
 # Create your views here.
 
 #競技中に行われ無いような操作は<Option>
@@ -90,14 +94,19 @@ class RegisterView(generic.edit.CreateView):
     success_url = reverse_lazy("scoreserver:index")
 
     def form_valid(self, form):
-        self.user = form.save()
-        self.user.save()
-        messages.success(self.request, "Saved!")
+        username = self.request.POST["username"]
+        password = self.request.POST["password"]
+        user = User()
+        user.username = username
+        user.set_password(password)
+        user.save()
+        messages.success(self.request, "Saved {}!".format(user.__dict__))
         if self.request.user: #ログイン済みであれば
             logout(self.request) #一旦ログアウト
-        print("Authenticate with <username:{}, password:{}> ...".format(self.user.username, self.user.password))
-        user = authenticate(username=self.user.username, password=self.user.password)
-        login(self.request, user)
+        import pdb; pdb.set_trace()
+        authenticated_user = authenticate(username=user.username, password=user.password)
+
+        login(self.request, authenticated_user)
 
         return super().form_valid(form)
 

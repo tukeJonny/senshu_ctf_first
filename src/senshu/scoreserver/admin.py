@@ -1,8 +1,9 @@
 #-*- coding: utf-8 -*-
 from django.contrib import admin
 
-from .models import Question, Category, Flag, Hint, User, AttackPointHistory, AnswerHistory #, Notice
-
+from .models import Question, Category, Flag, Hint, AttackPointHistory, AnswerHistory #, Notice
+from django.contrib.auth import get_user_model
+User = get_user_model()
 # Register your models here.
 
 # class NoticeAdmin(admin.ModelAdmin):
