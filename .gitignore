@@ -153,3 +153,8 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# dynamic file
+src/senshu/scoreserver/fixtures/initial_data.json
+src/senshu/scoreserver/static/css/bootcards-desktop.css
+src/senshu/scoreserver/static/css/bootcards-desktop.css.map
