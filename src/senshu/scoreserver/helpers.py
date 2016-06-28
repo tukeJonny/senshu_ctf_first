@@ -34,3 +34,16 @@ def get_ranking_info(request):
     all_user_num = len(all_user)
     login_user_rank = all_user.index(request.user)+1 #0,1,2,... -> 1,2,3,...
     return(all_user_num,login_user_rank)
+
+def is_already_attacked(user, question_id):
+    """
+    フラグを提出したuserが、過去にquestion_idの問題の正解フラグを提出しているならばTrueを返す
+    そうでなければFalseを返す
+    :param user:
+    :param question_id:
+    :return:
+    """
+    question = Question.objects.get(pk=question_id)
+    #フラグを提出したユーザが今までに攻撃成功した履歴を引っ張ってくる
+    attack_point_history = AttackPointHistory.objects.filter(user=user)
+    return question in [aph.question for aph in attack_point_history]

@@ -16,7 +16,7 @@ from .models import Question, Flag, AnswerHistory, AttackPointHistory
 from django.contrib.auth import get_user_model
 from django.utils.decorators import method_decorator
 User = get_user_model()
-from scoreserver.helpers import FlagSubmit, get_ranking_info
+from scoreserver.helpers import FlagSubmit, get_ranking_info, is_already_attacked
 import pprint
 from django.db import connection
 
@@ -84,12 +84,16 @@ def flag_submit_view(request, question_id):
     flag = request.POST['flag']
     answer = Flag.objects.get(question=question_id).flag
     fs = FlagSubmit(request.user, question_id, flag)
-    if flag == answer:
-        messages.success(request, "Congraturations! flag is correct!")
-        fs.success()
+    #まだ正解しておらず、フラグが正しいのであれば攻撃成功とみなす
+    if not is_already_attacked(request.user, question_id):
+        if flag == answer:
+            messages.success(request, "Congraturations! flag is correct!")
+            fs.success()
+        else:
+            messages.warning(request, "Oh... flag is incorrect... please try again!")
+            fs.fail()
     else:
-        messages.warning(request, "Oh... flag is incorrect... please try again!")
-        fs.fail()
+        messages.warning(request, "You're already attacked this question.")
     return HttpResponseRedirect(reverse('scoreserver:question_detail', args=(question_id,)))
 
 class QuestionListView(LoginRequiredMixin, generic.ListView):
@@ -102,6 +106,10 @@ class QuestionListView(LoginRequiredMixin, generic.ListView):
         context = super(QuestionListView, self).get_context_data(**kwargs)
         request = context['view'].request
         context['all_user_num'], context['login_user_rank'] = get_ranking_info(request)
+        questions = Question.objects.all() #配列
+        #DoesNotExist例外ハンドラを書くべき
+        points = [flag.point for flag in [Flag.objects.get(question=question) for question in questions]]
+        context['zipped_questions_points'] = zip(questions, points)
         return context
 
     def get_queryset(self):
@@ -127,11 +135,6 @@ class RegisterView(generic.edit.CreateView):
     def form_valid(self, form):
         username = self.request.POST["username"]
         password = self.request.POST["password"]
-        # user = User()
-        # user.username = username
-        # user.set_password(password)
-        # user.save()
-
         result = super(RegisterView, self).form_valid(form)
         #super.form_validでは生パスワードを設定してしまうため、こちら側で行う
         registered_user = User.objects.get(username=username)
@@ -179,13 +182,9 @@ class CategoryTemplateView(LoginRequiredMixin, generic.TemplateView):
     def get_zipped_context_data(self, category):
         """ categoryのquestionsと、それに対応付いたpointsをzipで固めて返す """
         questions = Question.objects.filter(category__name=category) #配列
-        points = []
-        for question in questions:
-            point = -1
-            flag = Flag.objects.filter(question=question)
-            if len(flag) > 0:
-                point = flag[0].point
-            points.append(point)
+        #DoesNotExist例外ハンドラを書くべき
+        #気のせいかもしれないが、questionsと順番があっていないとダメなので、要チェック
+        points = [flag.point for flag in [Flag.objects.get(question=question) for question in questions]]
         return(zip(questions, points))
 
 
