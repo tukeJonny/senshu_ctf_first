@@ -29,7 +29,7 @@ class Question(models.Model):
 
 class Flag(models.Model):
     """ 問題の答え(フラグ) """
-    question = models.ForeignKey(Question, verbose_name="問題")
+    question = models.ForeignKey(Question, verbose_name="問題", unique=True)
     flag = models.CharField(max_length=50, unique=True)
     point = models.IntegerField("得点")
 

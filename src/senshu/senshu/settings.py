@@ -116,7 +116,7 @@ ADMIN_PASSWORD = "pbkdf2_sha256$24000$KCM2C1miSTE9$nRlP2y9ynK4yIcAmOa4erN+VlSkdy
 
 LOGIN_URL = '/scoreserver/login'
 AUTH_USER_MODEL = 'scoreserver.User'
-SILENCED_SYSTEM_CHECKS = ["auth.E003", "auth.W004"] #これあかんかも
+SILENCED_SYSTEM_CHECKS = ["auth.E003", "auth.W004", "fields.W342"] #これあかんかも
 
 INSTALLED_APPS += ('debug_toolbar',)
 def callback_for_toolbar(request):

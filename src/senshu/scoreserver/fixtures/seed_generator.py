@@ -50,9 +50,9 @@ def main():
     #Hint
     jsondata.extend(json.loads(hsg.get_hint_jsondata(hint_num)))
     #Attack Point History
-    jsondata.extend(json.loads(aphsg.get_attackpointhistory_jsondata(attack_point_history_num)))
+    #jsondata.extend(json.loads(aphsg.get_attackpointhistory_jsondata(attack_point_history_num)))
     #Answer History
-    jsondata.extend(json.loads(ahsg.get_answerhistory_jsondata(answer_history_num)))
+    #jsondata.extend(json.loads(ahsg.get_answerhistory_jsondata(answer_history_num)))
 
 
     print(jsondata)
