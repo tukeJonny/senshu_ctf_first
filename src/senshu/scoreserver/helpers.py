@@ -27,3 +27,10 @@ class FlagSubmit(object):
         #AnswerHistory
         ah = AnswerHistory(user=self.user, question=self.question, submit_flag=self.flag_str)
         ah.save()
+
+def get_ranking_info(request):
+    all_user = list(User.objects.filter(is_superuser=False, is_staff=False))
+    #import pdb; pdb.set_trace()
+    all_user_num = len(all_user)
+    login_user_rank = all_user.index(request.user)+1 #0,1,2,... -> 1,2,3,...
+    return(all_user_num,login_user_rank)

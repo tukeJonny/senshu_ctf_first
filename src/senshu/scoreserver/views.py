@@ -15,7 +15,7 @@ from django.template.loader import get_template
 from .models import Question, Flag, AnswerHistory, AttackPointHistory
 from django.contrib.auth import get_user_model
 User = get_user_model()
-from scoreserver.helpers import FlagSubmit
+from scoreserver.helpers import FlagSubmit, get_ranking_info
 import pprint
 from django.db import connection
 
@@ -94,6 +94,13 @@ class QuestionListView(LoginRequiredMixin, generic.ListView):
     #redirect_field_name = 'scoreserver/index'
     template_name = 'scoreserver/questions.html' #should modify problems.html -> questions.html
     context_object_name = 'questions'
+
+    def get_context_data(self, **kwargs):
+        context = super(QuestionListView, self).get_context_data(**kwargs)
+        request = context['view'].request
+        context['all_user_num'], context['login_user_rank'] = get_ranking_info(request)
+        return context
+
     def get_queryset(self):
         return Question.objects.all
 
@@ -104,6 +111,8 @@ class ScoreBoardView(LoginRequiredMixin, generic.TemplateView):
         context = super(ScoreBoardView, self).get_context_data(**kwargs)
         context["title"] = "scoreboard"
         context["users"] = User.objects.filter(is_superuser=False, is_staff=False)#.order_by('-points')
+        request = context['view'].request
+        context['all_user_num'], context['login_user_rank'] = get_ranking_info(request)
         return context
 
 class RegisterView(generic.edit.CreateView):
@@ -139,6 +148,8 @@ class QuestionDetailView(LoginRequiredMixin, generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(QuestionDetailView, self).get_context_data(**kwargs)
+        request = context['view'].request
+        context['all_user_num'], context['login_user_rank'] = get_ranking_info(request)
         context['title'] = "Question Detail"
         return context
 
@@ -146,14 +157,9 @@ class QuestionDetailView(LoginRequiredMixin, generic.DetailView):
 class CategoryTemplateView(LoginRequiredMixin, generic.TemplateView):
     model = Question
     def get_context_data(self, **kwargs):
-        #import pdb; pdb.set_trace()
         context = super(CategoryTemplateView, self).get_context_data(**kwargs)
         request = context['view'].request
-        all_user = list(User.objects.filter(is_superuser=False, is_staff=False))
-        #import pdb; pdb.set_trace()
-        context['all_user_num'] = len(all_user)
-        context['login_user_rank'] = all_user.index(request.user)+1 #0,1,2,... -> 1,2,3,...
-
+        context['all_user_num'], context['login_user_rank'] = get_ranking_info(request)
         return context
 
     def get_zipped_context_data(self, category):
