@@ -114,7 +114,7 @@ AUTHENTICATION_BACKENDS = [
 ADMIN_LOGIN = "admin"
 ADMIN_PASSWORD = "pbkdf2_sha256$24000$KCM2C1miSTE9$nRlP2y9ynK4yIcAmOa4erN+VlSkdynT8tCRzB6Oz9r0="
 
-LOGIN_URL = 'scoreserver/login'
+LOGIN_URL = '/scoreserver/login'
 AUTH_USER_MODEL = 'scoreserver.User'
 SILENCED_SYSTEM_CHECKS = ["auth.E003", "auth.W004"] #これあかんかも
 
