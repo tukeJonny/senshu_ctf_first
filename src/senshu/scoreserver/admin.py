@@ -31,13 +31,13 @@ class HintInline(admin.TabularInline):
 class QuestionAdmin(admin.ModelAdmin):
     fieldsets = [
         (None, {'fields': ['category', 'title']}),
-        ('問題URL', {'fields': ['problem_url']}),
+        ('問題URL', {'fields': ['url']}),
         ('正解者数', {'fields': ['solved']})
     ]
     inlines = [FlagInline, HintInline]
-    list_display = ('title', 'category', 'solved', 'problem_url')
+    list_display = ('title', 'category', 'solved', 'url')
     list_filter = ['solved']
-    search_fields = ['title', 'category__name', 'problem_url']
+    search_fields = ['title', 'category__name', 'url']
 
 class UserAdmin(admin.ModelAdmin):
     fieldsets = [

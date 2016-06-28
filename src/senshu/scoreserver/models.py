@@ -25,7 +25,7 @@ class Question(models.Model):
     title = models.CharField(max_length=50)
     description = models.TextField(default='')
     solved = models.IntegerField("解いた人の数", blank=True, null=True)
-    problem_url = models.CharField(max_length=50, null=True)
+    url = models.CharField(max_length=50, null=True)
 
 class Flag(models.Model):
     """ 問題の答え(フラグ) """

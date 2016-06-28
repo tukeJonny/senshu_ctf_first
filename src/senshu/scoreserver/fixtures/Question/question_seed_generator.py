@@ -14,7 +14,7 @@ class Question(object):
         self.title = self.make_title()
         self.description = self.make_description()
         self.solved = self.make_solved()
-        self.problem_url = self.make_problem_url()
+        self.url = self.make_url()
 
     def make_category(self):
         return random.randint(1, cnum)
@@ -28,19 +28,19 @@ class Question(object):
     def make_solved(self):
         return random.randint(0, 20)
 
-    def make_problem_url(self):
+    def make_url(self):
         return "http://example.com/{}".format(gt.generate_randstr(30))
 
     def make_hint(self):
         pass
 
     def __str__(self):
-        return "<Question: {category}, {title}, {description}, {solved}, {problem_url}>".format(
+        return "<Question: {category}, {title}, {description}, {solved}, {url}>".format(
             category=self.category,
             title=self.title,
             description=self.description,
             solved=self.solved,
-            problem_url=self.problem_url
+            url=self.url
         )
 
 def get_question_jsondata(NUM):

@@ -92,7 +92,7 @@ def flag_submit_view(request, question_id):
 class QuestionListView(LoginRequiredMixin, generic.ListView):
     login_url = '/scoreserver/login'
     #redirect_field_name = 'scoreserver/index'
-    template_name = 'scoreserver/questions.html' #should modify problems.html -> questions.html
+    template_name = 'scoreserver/questions.html'
     context_object_name = 'questions'
 
     def get_context_data(self, **kwargs):
@@ -124,18 +124,29 @@ class RegisterView(generic.edit.CreateView):
     def form_valid(self, form):
         username = self.request.POST["username"]
         password = self.request.POST["password"]
-        user = User()
-        user.username = username
-        user.set_password(password)
-        user.save()
-        messages.success(self.request, "Saved {}!".format(user.username))
-        if self.request.user.is_authenticated(): #ログイン済みであれば
-            logout(self.request) #一旦ログアウト
-        authenticated_user = authenticate(username=user.username, password=password)
+        # user = User()
+        # user.username = username
+        # user.set_password(password)
+        # user.save()
 
-        login(self.request, authenticated_user)
-
-        return super().form_valid(form)
+        result = super(RegisterView, self).form_valid(form)
+        #super.form_validでは生パスワードを設定してしまうため、こちら側で行う
+        registered_user = User.objects.get(username=username)
+        registered_user.set_password(password)
+        registered_user.save()
+        if result:
+            messages.success(self.request, "Saved {}!".format(username))
+            if self.request.user.is_authenticated(): #ログイン済みであれば
+                logout(self.request) #一旦ログアウト
+            authenticated_user = authenticate(username=username, password=password)
+            if authenticated_user is not None:
+                login(self.request, authenticated_user)
+            else:
+                messages.warning(self.request, "Please login")
+            print("Register Executed Queries {}".format(connection.queries))
+        else:
+            messages.warning(self.request, "Something went wrong... Please contact a system administrator.")
+        return result
 
     def form_invalid(self, form):
         messages.warning(self.request, "Can't saved...")

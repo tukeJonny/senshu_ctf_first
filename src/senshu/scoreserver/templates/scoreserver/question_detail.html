@@ -1,11 +1,5 @@
 <!-- this is test file. after tukejonny's test finished, this file will be removed. !-->
-<!-- model fields here.
-category = models.ForeignKey(Category, verbose_name="カテゴリ")
-title = models.CharField(max_length=50)
-description = models.TextField(default='')
-solved = models.IntegerField("解いた人の数", blank=True, null=True)
-problem_url = models.CharField(max_length=50, null=True)
-!-->
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -69,10 +63,10 @@ body
           </form>
         </div>
         </p>
-        {% if question.problem_url %} <!-- file_urlが空かどうかの判定-->
+        {% if question.url %} <!-- file_urlが空かどうかの判定-->
         <div class="list-group-item">
           <h4 class="list-group-item-heading">File</h4>
-          <a class="list-group-item-text" href="{{ question.problem_url }}">{{ question.problem_url }}</a>
+          <a class="list-group-item-text" href="{{ question.url }}">{{ question.url }}</a>
         </div>
         {% endif %}
       </div>
@@ -95,7 +89,7 @@ body
                 <th>{{ question.title }}</th>
                 <th>{{ question.description }}</th>
                 <th>{{ question.solved }}</th>
-                <th><a href="{{ question.problem_url }}">problem url</a></th>
+                <th><a href="{{ question.url }}">problem url</a></th>
             </tr>
             </tbody>
         </table>
