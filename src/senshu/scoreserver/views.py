@@ -65,14 +65,14 @@ def login_view(request):
     context['checked_user'] = user
     return render(request, 'scoreserver/login.html', context)
 
-#@login_required
+@login_required(login_url="/scoreserver/login")
 def logout_view(request):
     template_name = "scoreserver/logout.html"
     pprint.pprint(request.__dict__)
     logout(request)
     return render(request, template_name, {"logout": True})
 
-#@login_required
+@login_required(login_url="/scoreserver/login")
 def flag_submit_view(request, question_id):
     context = {}
     context['title'] = "Question Detail"
