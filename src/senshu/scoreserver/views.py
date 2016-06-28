@@ -65,12 +65,14 @@ def login_view(request):
     context['checked_user'] = user
     return render(request, 'scoreserver/login.html', context)
 
+#@login_required
 def logout_view(request):
     template_name = "scoreserver/logout.html"
     pprint.pprint(request.__dict__)
     logout(request)
     return render(request, template_name, {"logout": True})
 
+#@login_required
 def flag_submit_view(request, question_id):
     context = {}
     context['title'] = "Question Detail"
@@ -84,6 +86,8 @@ def flag_submit_view(request, question_id):
         messages.warning(request, "Oh... flag is incorrect... please try again!")
         fs.fail()
     return HttpResponseRedirect(reverse('scoreserver:question_detail', args=(question_id,)))
+
+
 
 class QuestionListView(LoginRequiredMixin, generic.ListView):
     login_url = '/scoreserver/login'
@@ -99,7 +103,7 @@ class ScoreBoardView(LoginRequiredMixin, generic.TemplateView):
     def get_context_data(self, **kwargs):
         context = super(ScoreBoardView, self).get_context_data(**kwargs)
         context["title"] = "scoreboard"
-        context["users"] = User.objects.filter(is_superuser=False, is_staff=False).order_by('-points')
+        context["users"] = User.objects.filter(is_superuser=False, is_staff=False)#.order_by('-points')
         return context
 
 class RegisterView(generic.edit.CreateView):
@@ -141,6 +145,17 @@ class QuestionDetailView(LoginRequiredMixin, generic.DetailView):
 #基底クラス
 class CategoryTemplateView(LoginRequiredMixin, generic.TemplateView):
     model = Question
+    def get_context_data(self, **kwargs):
+        #import pdb; pdb.set_trace()
+        context = super(CategoryTemplateView, self).get_context_data(**kwargs)
+        request = context['view'].request
+        all_user = list(User.objects.filter(is_superuser=False, is_staff=False))
+        #import pdb; pdb.set_trace()
+        context['all_user_num'] = len(all_user)
+        context['login_user_rank'] = all_user.index(request.user)+1 #0,1,2,... -> 1,2,3,...
+
+        return context
+
     def get_zipped_context_data(self, category):
         """ categoryのquestionsと、それに対応付いたpointsをzipで固めて返す """
         questions = Question.objects.filter(category__name=category) #配列

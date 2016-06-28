@@ -62,7 +62,7 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser):
     """ CTFのプレイヤー """
     class Meta:
-        ordering = ("points",)
+        ordering = ("-points",)
         db_table = 'scoreserver_user'
 
     username = models.CharField(default='', max_length=50, unique=False) #システムエラー回避のためunique=Trueを指定
