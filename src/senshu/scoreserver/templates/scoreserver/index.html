@@ -1,4 +1,38 @@
+{% load staticfiles %}
+<head>
+    <meta charset="UTF-8">
+    <title>Hello SENSHU-CTF</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/cathode-ray_tube.css' %}">
+</head>
+<body>
+<input id="switch" type="checkbox" checked=""/>
+<label for="switch" class="switch-label">Power </label>
+<div class="container">
+  <div class="screen">
+    <div id="main">
+    <h3>Hello SENSHU-CTF</h3>
+    {% if user.is_authenticated %}
+        <p>Hello! {{ user.get_username }}</p>
 
+    {% endif %}
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <a href="{% url 'scoreserver:questions' %}">Questions</a>
+    <a href="{% url 'scoreserver:login' %}">Login</a>
+    <a href="{% url 'scoreserver:logout' %}">Logout</a>
+    <a href="{% url 'scoreserver:register' %}">Register</a>
+    </div>
+  </div>
+  <div class="overlay">Video1</div>
+</div>
+</body>
+<!--
 {% block content %}
     <h3>This is scoreserver Index Page</h3>
     {% if user.is_authenticated %}
@@ -17,3 +51,4 @@
     <a href="{% url 'scoreserver:logout' %}">Logout</a>
     <a href="{% url 'scoreserver:register' %}">Register</a>
 {% endblock content %}
+-->
