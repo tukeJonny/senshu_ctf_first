@@ -7,8 +7,27 @@
 </head>
 <body>
 <div class="main">
-{% for question in questions %}
-  <p>{{ question.title }}</p><br />
+{% for question ,point in zipped_questions_points %}
+<div class="question_panel col-xs-6 col-sm-4">
+<div class="panel panel-default">
+  <div class="panel-heading clearfix">
+    <h3 class="panel-title pull-left">{{ question.title }}</h3>
+      <a class="btn pull-right" href="{% url 'scoreserver:question_detail' question.id %}">
+	<i style="font-size:2em" class="material-icons">pageview</i>
+      </a>
+    </div>
+    <div class="list-group">
+      <div class="list-group-item">
+        <h4 class="list-group-item-heading">Solved</h4>
+	<p class="list-group-item-text">{{ question.solved }}</p>
+      </div>
+      <div class="list-group-item">
+	<h4 class="list-group-item-heading">Point</h4>
+        <p class="list-group-item-text">{{ question.point }}</p>
+      </div>
+    </div>
+</div>
+</div>
 {% endfor %}
 </div>
 </body>
