@@ -87,8 +87,6 @@ def flag_submit_view(request, question_id):
         fs.fail()
     return HttpResponseRedirect(reverse('scoreserver:question_detail', args=(question_id,)))
 
-
-
 class QuestionListView(LoginRequiredMixin, generic.ListView):
     login_url = '/scoreserver/login'
     #redirect_field_name = 'scoreserver/index'
