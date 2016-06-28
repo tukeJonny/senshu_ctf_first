@@ -14,6 +14,7 @@ from django.template.context import RequestContext
 from django.template.loader import get_template
 from .models import Question, Flag, AnswerHistory, AttackPointHistory
 from django.contrib.auth import get_user_model
+from django.utils.decorators import method_decorator
 User = get_user_model()
 from scoreserver.helpers import FlagSubmit, get_ranking_info
 import pprint
@@ -44,6 +45,10 @@ def index(request):
     return render(request, 'scoreserver/index.html', context)
 
 def login_view(request):
+    template_name = reverse('scoreserver:index')
+    #import pdb; pdb.set_trace()
+    #if request.GET['next']:
+    #    template_name = request.GET['next']
     context=RequestContext(request, {})
     user = None
     print(request.method)
@@ -54,7 +59,7 @@ def login_view(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                return HttpResponseRedirect(reverse('scoreserver:index'))
+                return HttpResponseRedirect(template_name)
             else:
                 context['is_inactive'] = True
         else:
