@@ -26,7 +26,7 @@ class Question(object):
         return "Question_desc:"+gt.generate_randstr(100)
 
     def make_solved(self):
-        return random.randint(0, 20)
+        return 0#random.randint(0, 20)
 
     def make_url(self):
         return "http://example.com/{}".format(gt.generate_randstr(30))

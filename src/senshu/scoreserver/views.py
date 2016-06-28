@@ -46,9 +46,8 @@ def index(request):
 
 def login_view(request):
     template_name = reverse('scoreserver:index')
-    #import pdb; pdb.set_trace()
-    #if request.GET['next']:
-    #    template_name = request.GET['next']
+    if 'next' in request.GET.keys():
+        template_name = request.GET['next']
     context=RequestContext(request, {})
     user = None
     print(request.method)
@@ -157,6 +156,9 @@ class RegisterView(generic.edit.CreateView):
     def form_invalid(self, form):
         messages.warning(self.request, "Can't saved...")
         return super().form_invalid(form)
+
+#class UserUpdateView(generic.edit.UpdateView):
+
 
 class QuestionDetailView(LoginRequiredMixin, generic.DetailView):
     template_name = "scoreserver/question_detail.html"
