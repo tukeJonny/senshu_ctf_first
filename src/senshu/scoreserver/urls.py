@@ -1,4 +1,4 @@
-from django.conf.urls import url, include
+from django.conf.urls import url, include, handler403, handler404
 from django.contrib import admin
 import django.contrib.auth.views as auth_views
 from . import views
@@ -6,6 +6,9 @@ from .views import QuestionListView
 from .views import QuestionDetailView
 from .views import ScoreBoardView, WebView, NetworkView, CryptoView, ForensicsView, BinaryView, MiscView
 from .views import RegisterView, UserUpdateView
+
+handler404 = 'scoreserver.views.not_found'
+handler403 = 'scoreserver.views.forbidden'
 
 app_name = 'scoreserver'
 urlpatterns = [

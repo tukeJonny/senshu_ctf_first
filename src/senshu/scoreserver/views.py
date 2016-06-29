@@ -1,7 +1,7 @@
 #-*- coding: utf-8 -*-
 
 from django.core.urlresolvers import reverse, reverse_lazy
-from django.shortcuts import render, HttpResponseRedirect, redirect
+from django.shortcuts import render, HttpResponseRedirect, redirect, render_to_response
 from django.views import generic
 from django.views import generic
 from django.contrib import messages
@@ -331,4 +331,13 @@ class MiscView(CategoryTemplateView):
         context['zipped_questions_points'] = self.get_zipped_context_data("Misc")
         return context
 
+#--- error handler ---
+def not_found(request):
+    response = render_to_response('404.html', context_instance=RequestContext(request))
+    response.status_code = 404
+    return response
 
+def forbidden(request):
+    response = render_to_response('403.html', context_instance=RequestContext(request))
+    response.status_code = 403
+    return response
