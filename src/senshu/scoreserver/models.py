@@ -117,8 +117,14 @@ class AttackPointHistory(models.Model):
     question = models.ForeignKey(Question, verbose_name="問題")
     point = models.IntegerField("得点")
 
+    def __str__(self):
+        return "{user}が{question}の正解フラグをSubmitし、{point}獲得しました.".format(**self.__dict__)
+
 class AnswerHistory(models.Model):
     """ 回答履歴（成功しているかに関わらず） """
     user = models.ForeignKey(User, verbose_name="回答者")
     question = models.ForeignKey(Question, verbose_name="問題")
     submit_flag = models.CharField(max_length=50, verbose_name="提出フラグ")
+
+    def __str__(self):
+        return "{user}が{question}のフラグ({submit_flag})をSubmitしました.".format(**self.__dict__)
