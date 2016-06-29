@@ -6,7 +6,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 import requests
 
-test_incoming_url = None
+test_incoming_url = None #settings.pyに書くべき
 
 def post_to_slack(channel, name, webhook_url, msg, icon_url):
     if webhook_url is not None:

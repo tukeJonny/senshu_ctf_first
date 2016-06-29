@@ -21,7 +21,7 @@
       </thead>
       <tbody>
 	{% for u in users %}
-	  <tr {% if u.id == user.id %} style="background-color:cyan;" {% endif %}>
+	  <tr {% if u.id == user.id %} style="background-color:lime;" {% endif %}>
 	    <th>{{ forloop.counter }}</th>
 	    <th>{{ u.username }}</th>
 	    <th>{{ u.points }}</th>

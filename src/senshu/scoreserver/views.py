@@ -1,9 +1,7 @@
 #-*- coding: utf-8 -*-
 
-from django.utils import timezone
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.shortcuts import render, HttpResponseRedirect, redirect
-from django.http import HttpResponse
 from django.views import generic
 from django.views import generic
 from django.contrib import messages
@@ -14,10 +12,8 @@ from django.template.context import RequestContext
 from django.template.loader import get_template
 from .models import Question, Flag, AnswerHistory, AttackPointHistory
 from django.contrib.auth import get_user_model
-from django.utils.decorators import method_decorator
 User = get_user_model()
 from scoreserver.helpers import FlagSubmit, get_ranking_info, is_already_attacked, get_user_solved_questions
-import pprint
 from django.db import connection
 
 # Create your views here.
@@ -35,6 +31,9 @@ from django.db import connection
 #フラグ判定、正解であればAttackPointHistoryを追加、ユーザのPoint計算
 #フラグ提出と同じページに飛ばしてCongraturations!って表示
 #不正解であれば、フラグ提出ページに飛ばしてWrong...って表示
+#問題詳細画面、ちょっと上に寄りすぎ。見辛い
+#ログアウトボタン欲しいので、サイドバーに追加するなりして欲しい
+#サイドバーだけでなくトップバーを用意し、そこにログアウトボタンとか
 
 #Memos
 #@login_requiredデコレータをつけることで、認証が必要なビューを定義できる
@@ -70,7 +69,6 @@ def login_view(request):
 @login_required(login_url="/scoreserver/login")
 def logout_view(request):
     template_name = "scoreserver/logout.html"
-    pprint.pprint(request.__dict__)
     logout(request)
     return render(request, template_name, {"logout": True})
 
@@ -93,36 +91,7 @@ def flag_submit_view(request, question_id):
         messages.warning(request, "You're already attacked this question.")
     return HttpResponseRedirect(reverse('scoreserver:question_detail', args=(question_id,)))
 
-class QuestionListView(LoginRequiredMixin, generic.ListView):
-    login_url = '/scoreserver/login'
-    #redirect_field_name = 'scoreserver/index'
-    template_name = 'scoreserver/questions.html'
-    context_object_name = 'questions'
 
-    def get_context_data(self, **kwargs):
-        context = super(QuestionListView, self).get_context_data(**kwargs)
-        request = context['view'].request
-        context['all_user_num'], context['login_user_rank'] = get_ranking_info(request)
-        context['solved_questions'] = get_user_solved_questions(self.request.user)
-        questions = Question.objects.all() #配列
-        #DoesNotExist例外ハンドラを書くべき
-        points = [flag.point for flag in [Flag.objects.get(question=question) for question in questions]]
-        context['zipped_questions_points'] = zip(questions, points)
-        return context
-
-    def get_queryset(self):
-        return Question.objects.all
-
-class ScoreBoardView(LoginRequiredMixin, generic.TemplateView):
-    template_name = "scoreserver/scoreboard.html"
-
-    def get_context_data(self, **kwargs):
-        context = super(ScoreBoardView, self).get_context_data(**kwargs)
-        context["title"] = "scoreboard"
-        context["users"] = User.objects.filter(is_superuser=False, is_staff=False)#.order_by('-points')
-        request = context['view'].request
-        context['all_user_num'], context['login_user_rank'] = get_ranking_info(request)
-        return context
 
 class RegisterView(generic.edit.CreateView):
     template_name = "scoreserver/register.html"
@@ -158,6 +127,46 @@ class RegisterView(generic.edit.CreateView):
 
 #class UserUpdateView(generic.edit.UpdateView):
 
+#---------- sidebar zone -------
+
+class BaseTemplateView(generic.TemplateView):
+    """
+    問題を表示する画面やスコアボードのビューに対する基底クラス
+    """
+    def get_context_data(self, **kwargs):
+        context = super(BaseTemplateView, self).get_context_data(**kwargs)
+        context['all_user_num'], context['login_user_rank'] = get_ranking_info(request)
+
+class QuestionListView(LoginRequiredMixin, generic.ListView):
+    login_url = '/scoreserver/login'
+    #redirect_field_name = 'scoreserver/index'
+    template_name = 'scoreserver/questions.html'
+    context_object_name = 'questions'
+
+    def get_context_data(self, **kwargs):
+        context = super(QuestionListView, self).get_context_data(**kwargs)
+        request = context['view'].request
+        #context['all_user_num'], context['login_user_rank'] = get_ranking_info(request)
+        context['solved_questions'] = get_user_solved_questions(self.request.user)
+        questions = Question.objects.all() #配列
+        #DoesNotExist例外ハンドラを書くべき
+        points = [flag.point for flag in [Flag.objects.get(question=question) for question in questions]]
+        context['zipped_questions_points'] = zip(questions, points)
+        return context
+
+    def get_queryset(self):
+        return Question.objects.all
+
+class ScoreBoardView(LoginRequiredMixin, generic.TemplateView):
+    template_name = "scoreserver/scoreboard.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(ScoreBoardView, self).get_context_data(**kwargs)
+        context["title"] = "scoreboard"
+        context["users"] = User.objects.filter(is_superuser=False, is_staff=False)#.order_by('-points')
+        request = context['view'].request
+        context['all_user_num'], context['login_user_rank'] = get_ranking_info(request)
+        return context
 
 class QuestionDetailView(LoginRequiredMixin, generic.DetailView):
     template_name = "scoreserver/question_detail.html"
