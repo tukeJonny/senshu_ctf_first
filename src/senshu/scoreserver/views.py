@@ -113,7 +113,7 @@ class RegisterView(generic.edit.CreateView):
         registered_user = User.objects.get(username=username)
         registered_user.set_password(password)
         registered_user.save()
-        if result:
+        if result: #フォームのバリデーションに引っかからなかったら、一緒にログイン処理もこちら側で行ってしまう
             messages.success(self.request, "Saved {}!".format(username))
             if self.request.user.is_authenticated(): #ログイン済みであれば
                 logout(self.request) #一旦ログアウト
@@ -123,7 +123,7 @@ class RegisterView(generic.edit.CreateView):
             else:
                 messages.warning(self.request, "Please login")
             print("Register Executed Queries {}".format(connection.queries))
-        else:
+        else: #引っかかった
             messages.warning(self.request, "Something went wrong... Please contact a system administrator.")
         return result
 
@@ -132,6 +132,10 @@ class RegisterView(generic.edit.CreateView):
         return super().form_invalid(form)
 
 class UserUpdateView(LoginRequiredMixin, generic.edit.UpdateView):
+    """
+    ユーザ更新(Profile)用のビュー
+    ユーザは、ユーザ名とパスワードの変更が可能である
+    """
     model = User
     form_class = UserUpdateForm
     template_name = "scoreserver/profile.html"
@@ -156,6 +160,9 @@ class UserUpdateView(LoginRequiredMixin, generic.edit.UpdateView):
 # --- Question Views ---
 
 class QuestionListView(LoginRequiredMixin, generic.ListView):
+    """
+    Question一覧を表示するビュー
+    """
     login_url = '/scoreserver/login'
     #redirect_field_name = 'scoreserver/index'
     template_name = 'scoreserver/questions.html'
@@ -179,6 +186,9 @@ class QuestionListView(LoginRequiredMixin, generic.ListView):
         return Question.objects.all
 
 class ScoreBoardView(LoginRequiredMixin, generic.TemplateView):
+    """
+    スコアボードを表示するビュー
+    """
     template_name = "scoreserver/scoreboard.html"
 
     def get_context_data(self, **kwargs):
@@ -193,6 +203,9 @@ class ScoreBoardView(LoginRequiredMixin, generic.TemplateView):
         return context
 
 class QuestionDetailView(LoginRequiredMixin, generic.DetailView):
+    """
+    Questionの詳細画面を表示するビュー
+    """
     template_name = "scoreserver/question_detail.html"
     queryset = Question.objects.all()
     context_object_name = "question"
@@ -209,6 +222,9 @@ class QuestionDetailView(LoginRequiredMixin, generic.DetailView):
 
 #基底クラス
 class CategoryTemplateView(LoginRequiredMixin, generic.TemplateView):
+    """
+    カテゴリ(Web, Network, Crypto, Forensics, Binary, Misc)の基底クラス
+    """
     model = Question
     def get_context_data(self, **kwargs):
         context = super(CategoryTemplateView, self).get_context_data(**kwargs)
@@ -219,7 +235,11 @@ class CategoryTemplateView(LoginRequiredMixin, generic.TemplateView):
         return context
 
     def get_zipped_context_data(self, category):
-        """ categoryのquestionsと、それに対応付いたpointsをzipで固めて返す """
+        """
+        categoryのquestionsと、それに対応付いたpointsをzipで固めて返す
+        :param category: カテゴリの文字列("Web", "Network", ...)
+        :return: #categoryの問題(questions)とその問題の得点(points)をzipで固めて返す
+        """
         questions = Question.objects.filter(category__name=category) #配列
         #DoesNotExist例外ハンドラを書くべき
         #気のせいかもしれないが、questionsと順番があっていないとダメなので、要チェック

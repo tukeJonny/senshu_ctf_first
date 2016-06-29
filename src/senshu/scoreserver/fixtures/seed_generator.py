@@ -18,8 +18,7 @@ import hint_seed_generator as hsg
 import attack_point_history_seed_generator as aphsg
 import answer_history_seed_generator as ahsg
 
-from django.core.management.base import BaseCommand, CommandError
-
+#各ジェネレータに対し、いくつのモデルオブジェクトを生成するか知らせるための変数郡
 question_num = 50
 notice_num = 50
 flag_num = 50
@@ -29,6 +28,11 @@ attack_point_history_num = 0
 answer_history_num = 0
 
 def main():
+    """
+    各モデルのシードジェネレータからJSONオブジェクトを受け取り、loadしてPythonの辞書オブジェクトに変換、
+    それを配列に追加していく処理を行い、一つのJSONファイル(initial_data.json)に書き込む
+    :return:
+    """
     jsondata = []
 
     qsg.cnum = 6 #fix
