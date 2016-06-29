@@ -9,6 +9,15 @@ import requests
 test_incoming_url = None #settings.pyに書くべき
 
 def post_to_slack(channel, name, webhook_url, msg, icon_url):
+    """
+    Slackに、Incoming WebhookでPOSTさせるためのメソッド
+    :param channel: Slackのチャンネル
+    :param name: 投稿者名
+    :param webhook_url: Incoming WebhookのURL
+    :param msg: 投稿メッセージ
+    :param icon_url: 投稿者の画像アイコンのURL
+    :return: Slack Incoming Webhookインテグレーションからのレスポンス
+    """
     if webhook_url is not None:
         payload = {
             "channel": channel,
@@ -19,6 +28,7 @@ def post_to_slack(channel, name, webhook_url, msg, icon_url):
         jpayload = json.dumps(payload)
         #あとでrequestsをインスコ
         res = requests.post(webhook_url, jpayload, headers={'Content-Type': 'application/json'})
+        return res
 
 class FlagSubmit(object):
     def __init__(self, user, question_id, flag):
@@ -30,6 +40,15 @@ class FlagSubmit(object):
         except ObjectDoesNotExist:
             self.flag = flag
     def success(self):
+        """
+        フラグ提出の結果が正解の場合、
+        1. 回答履歴を追加
+        2. 正解した回答履歴を追加
+        3. ユーザの得点を更新
+        4. 問題のsolvedをインクリメント
+        5. SlackにPOST
+        :return: None
+        """
         #AnswerHistory
         ah = AnswerHistory(user=self.user, question=self.question, submit_flag=self.flag_str)
         ah.save()
@@ -45,6 +64,12 @@ class FlagSubmit(object):
         post_to_slack("#jvn_alert", "success_log",test_incoming_url, str(aph), "http://p.twpl.jp/show/orig/aqrNm")
 
     def fail(self):
+        """
+        フラグ提出が失敗の場合、
+        1. 回答履歴を追加
+        2. SlackにPOST
+        :return: None
+        """
         #AnswerHistory
         ah = AnswerHistory(user=self.user, question=self.question, submit_flag=self.flag_str)
         ah.save()
@@ -52,6 +77,10 @@ class FlagSubmit(object):
 
 
 def get_ranking_info(request):
+    """
+    :param request: Viewが受け取るrequestのオブジェクト
+    :return: 全ユーザ数及びrequest.userの現在のランクのタプル
+    """
     all_user = list(User.objects.filter(is_superuser=False, is_staff=False))
     #import pdb; pdb.set_trace()
     all_user_num = len(all_user)
@@ -62,9 +91,9 @@ def is_already_attacked(user, question_id):
     """
     フラグを提出したuserが、過去にquestion_idの問題の正解フラグを提出しているならばTrueを返す
     そうでなければFalseを返す
-    :param user:
-    :param question_id:
-    :return:
+    :param user: Userオブジェクト
+    :param question_id: QuestionのPrimary Key
+    :return: userの正解した回答履歴に対応する問題の一覧に、question_idの問題が含まれているか、真偽値で返す
     """
     question = Question.objects.get(pk=question_id)
     #フラグを提出したユーザが今までに攻撃成功した履歴を引っ張ってくる
@@ -72,6 +101,10 @@ def is_already_attacked(user, question_id):
     return question in [aph.question for aph in attack_point_history]
 
 def get_user_solved_questions(user):
+    """
+    :param user: Userオブジェクト
+    :return: userが解いた問題の一覧の配列
+    """
     #対象ユーザの攻撃成功履歴を取得
     aphs = AttackPointHistory.objects.filter(user=user)
     return [aph.question.id for aph in list(aphs)]

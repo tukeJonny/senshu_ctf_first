@@ -46,55 +46,56 @@ def index(request):
 
 def login_view(request):
     template_name = reverse('scoreserver:index')
+    #nextが指定されていれば、そこにリダイレクトさせるようにする
     if 'next' in request.GET.keys():
         template_name = request.GET['next']
+
     context=RequestContext(request, {})
     user = None
-    print(request.method)
-    if request.POST:
+    if request.POST: #ログインPOSTしてきているのであれば
         username = request.POST["username"]
         password = request.POST["password"]
         user = authenticate(username=username, password=password)
-        if user is not None:
-            if user.is_active:
-                login(request, user)
-                return HttpResponseRedirect(template_name)
+
+        if user is not None: #認証成功かつ
+            if user.is_active: #Userが有効
+                login(request, user) #ログイン
+                return HttpResponseRedirect(template_name) #リダイレクト
             else:
-                context['is_inactive'] = True
+                context['is_inactive'] = True #Userが無効である旨
         else:
-            print("Login failed.")
-            context['login_failed'] = True
+            context['login_failed'] = True #ログイン失敗である旨
     context['title'] = "login"
     context['request'] = request
-    context['checked_user'] = user
+    context['checked_user'] = user #確認済みのユーザ(Template側で認証済みユーザオブジェクトと分けるため)
     return render(request, 'scoreserver/login.html', context)
 
-@login_required(login_url="/scoreserver/login")
+@login_required(login_url="/scoreserver/login") #ログイン済みでなければ、ログアウトする意味がわからない
 def logout_view(request):
     template_name = "scoreserver/logout.html"
-    logout(request)
+    logout(request) #ログアウト
     return render(request, template_name, {"logout": True})
 
 # --- Flag submit ---
 
-@login_required(login_url="/scoreserver/login")
+@login_required(login_url="/scoreserver/login") #ログインしないとフラグは提出できない
 def flag_submit_view(request, question_id):
     context = {}
     context['title'] = "Question Detail"
-    flag = request.POST['flag']
-    answer = Flag.objects.get(question=question_id).flag
-    fs = FlagSubmit(request.user, question_id, flag)
+    flag = request.POST['flag'] #提出されてきたフラグを取得
+    answer = Flag.objects.get(question=question_id).flag #正解のフラグをDBから取得
+    fs = FlagSubmit(request.user, question_id, flag) #フラグ提出管理インスタンス生成
     #まだ正解しておらず、フラグが正しいのであれば攻撃成功とみなす
     if not is_already_attacked(request.user, question_id):
-        if flag == answer:
-            messages.success(request, "Congraturations! flag is correct!")
-            fs.success()
+        if flag == answer: #正解した
+            messages.success(request, "Congraturations! flag is correct!") #正解した旨
+            fs.success() #正解時の処理を行う
         else:
-            messages.warning(request, "Oh... flag is incorrect... please try again!")
-            fs.fail()
+            messages.warning(request, "Oh... flag is incorrect... please try again!") #不正解だった旨
+            fs.fail() #不正解時の処理を行う
     else:
-        messages.warning(request, "You're already attacked this question.")
-    return HttpResponseRedirect(reverse('scoreserver:question_detail', args=(question_id,)))
+        messages.warning(request, "You're already attacked this question.") #既にこの問題に対し、攻撃が成功済みである
+    return HttpResponseRedirect(reverse('scoreserver:question_detail', args=(question_id,))) #同じ画面に飛ばして、メッセージを表示させる
 
 # --- User Views (Register, Update, Delete) ---
 
