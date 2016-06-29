@@ -34,7 +34,6 @@ class Hint(models.Model):
 
 class UserManager(BaseUserManager):
     def create_user(self, username, password=None):
-        print("create user!")
         if not username:
             raise ValueError("Users must have username!!")
         if len(User.objects.filter(username=username)) > 0:

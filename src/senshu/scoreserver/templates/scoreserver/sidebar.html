@@ -18,6 +18,12 @@
 	<li>
           <a id="sidebar_problems" href="{% url 'scoreserver:questions' %}">Questions</a>
         </li>
+    <li>
+        <li>
+          <a href="{% url 'scoreserver:profile' user.id %}">Your Profile
+            <span class="pull-right hidden-xs showopacity"><i style="font-size:18px" class="material-icons">mode_edit</i></span>
+          </a>
+        </li>
         <li> 
           <a href="{% url 'scoreserver:web' %}">Web
             <span style="font-size:16px;" class="pull-right hidden-xs showopacity fa fa-newspaper-o"></span>

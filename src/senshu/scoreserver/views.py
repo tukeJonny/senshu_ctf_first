@@ -35,6 +35,7 @@ from django.db import connection
 #問題詳細画面、ちょっと上に寄りすぎ。見辛い
 #ログアウトボタン欲しいので、サイドバーに追加するなりして欲しい
 #サイドバーだけでなくトップバーを用意し、そこにログアウトボタンとか
+#ログイン時、Remember me 処理
 
 # --- index page ---
 
@@ -139,12 +140,39 @@ class UserUpdateView(LoginRequiredMixin, generic.edit.UpdateView):
     ユーザ更新(Profile)用のビュー
     ユーザは、ユーザ名とパスワードの変更が可能である
     """
+    slug_field = 'user_id'
+    slug_url_kwarg = 'user_id'
     model = User
     form_class = UserUpdateForm
     template_name = "scoreserver/profile.html"
+    success_url = reverse_lazy('scoreserver:index')
+
+    def form_valid(self, form):
+        username = self.request.POST["username"]
+        password = self.request.POST["password"]
+        if is_already_exist_user(username):
+            messages.warning(self.request, "This user had already registered!!")
+            return redirect(reverse_lazy("scoreserver:profile"))
+        result = super(UserUpdateView, self).form_valid(form)
+        #super.form_validでは生パスワードを設定してしまうため、こちら側で行う
+        updated_user = User.objects.get(username=username)
+        updated_user.set_password(password)
+        updated_user.save()
+        if result: #フォームのバリデーションに引っかからなかったら、一緒にログイン処理もこちら側で行ってしまう
+            messages.success(self.request, "Saved {}!".format(username))
+            if self.request.user.is_authenticated(): #ログイン済みであれば
+                logout(self.request) #一旦ログアウト
+            authenticated_user = authenticate(username=username, password=password)
+            if authenticated_user is not None:
+                login(self.request, authenticated_user)
+            else:
+                messages.warning(self.request, "Please login")
+            print("Register Executed Queries {}".format(connection.queries))
+        else: #引っかかった
+            messages.warning(self.request, "Something went wrong... Please contact a system administrator.")
+        return result
 
     def get_queryset(self):
-        import pdb; pdb.set_trace()
         queryset = super(UserUpdateView, self).get_queryset()
         return queryset.filter(pk=self.request.user.pk)
 
@@ -154,7 +182,6 @@ class UserUpdateView(LoginRequiredMixin, generic.edit.UpdateView):
         return context
 
     def get(self, request, *args, **kwargs):
-        import pdb; pdb.set_trace()
         super(UserUpdateView, self).get(request, *args, **kwargs)
         form = self.form_class
         context = self.get_context_data(object=self.object, form=form)
