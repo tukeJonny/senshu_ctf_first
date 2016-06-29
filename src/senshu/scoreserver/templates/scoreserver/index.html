@@ -3,6 +3,7 @@
     <meta charset="UTF-8">
     <title>Hello SENSHU-CTF</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <script src="{% static 'js/stream.js' %}"></script>
     <link rel="stylesheet" href="{% static 'css/cathode-ray_tube.css' %}">
 </head>
 <body>
@@ -27,6 +28,9 @@
     <a href="{% url 'scoreserver:login' %}">Login</a>
     <a href="{% url 'scoreserver:logout' %}">Logout</a>
     <a href="{% url 'scoreserver:register' %}">Register</a>
+    </div>
+    <div id="right">
+      <div id="stream_text"></div>
     </div>
   </div>
   <div class="overlay">Video1</div>
