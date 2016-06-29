@@ -15,9 +15,15 @@
 <div class="panel panel-default">
   <div class="panel-heading clearfix">
     <h3 class="panel-title pull-left">{{ question.title }}</h3>
+      {% if not question.id in solved_questions %}
       <a class="btn pull-right" href="{% url 'scoreserver:question_detail' question.id %}">
-	<i style="font-size:2em" class="material-icons">pageview</i>
+        <i style="font-size:2em" class="material-icons">pageview</i>
       </a>
+    {% else %}
+      <a class="btn pull-right" style="color:green" onclick="alert('You had already done this problem!')">
+        <i style="font-size:2em" class="material-icons">done</i>
+      </a>
+    {% endif %}
     </div>
     <div class="list-group">
       <div class="list-group-item">

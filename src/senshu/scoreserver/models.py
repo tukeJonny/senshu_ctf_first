@@ -118,7 +118,7 @@ class AttackPointHistory(models.Model):
     point = models.IntegerField("得点")
 
     def __str__(self):
-        return "{user}が{question}の正解フラグをSubmitし、{point}獲得しました.".format(**self.__dict__)
+        return "[+] {user}が{question_title}の正解フラグをSubmitし、{point}獲得しました.".format(user=self.user.username, question_title=self.question.title, point=self.point)
 
 class AnswerHistory(models.Model):
     """ 回答履歴（成功しているかに関わらず） """
@@ -127,4 +127,4 @@ class AnswerHistory(models.Model):
     submit_flag = models.CharField(max_length=50, verbose_name="提出フラグ")
 
     def __str__(self):
-        return "{user}が{question}のフラグ({submit_flag})をSubmitしました.".format(**self.__dict__)
+        return "[-] {user}が{question_title}のフラグ({submit_flag})をSubmitしました.".format(user=self.user.username, question_title=self.question.title, submit_flag=self.submit_flag)

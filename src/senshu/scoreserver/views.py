@@ -16,7 +16,7 @@ from .models import Question, Flag, AnswerHistory, AttackPointHistory
 from django.contrib.auth import get_user_model
 from django.utils.decorators import method_decorator
 User = get_user_model()
-from scoreserver.helpers import FlagSubmit, get_ranking_info, is_already_attacked
+from scoreserver.helpers import FlagSubmit, get_ranking_info, is_already_attacked, get_user_solved_questions
 import pprint
 from django.db import connection
 
@@ -40,8 +40,6 @@ from django.db import connection
 #@login_requiredデコレータをつけることで、認証が必要なビューを定義できる
 def index(request):
     context = {}
-    if request.method == "GET":
-        print("index: GET Detect")
     return render(request, 'scoreserver/index.html', context)
 
 def login_view(request):
@@ -105,6 +103,7 @@ class QuestionListView(LoginRequiredMixin, generic.ListView):
         context = super(QuestionListView, self).get_context_data(**kwargs)
         request = context['view'].request
         context['all_user_num'], context['login_user_rank'] = get_ranking_info(request)
+        context['solved_questions'] = get_user_solved_questions(self.request.user)
         questions = Question.objects.all() #配列
         #DoesNotExist例外ハンドラを書くべき
         points = [flag.point for flag in [Flag.objects.get(question=question) for question in questions]]
@@ -179,6 +178,7 @@ class CategoryTemplateView(LoginRequiredMixin, generic.TemplateView):
         context = super(CategoryTemplateView, self).get_context_data(**kwargs)
         request = context['view'].request
         context['all_user_num'], context['login_user_rank'] = get_ranking_info(request)
+        context['solved_questions'] = get_user_solved_questions(self.request.user)
         return context
 
     def get_zipped_context_data(self, category):

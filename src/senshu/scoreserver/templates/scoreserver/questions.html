@@ -8,13 +8,21 @@
 <body>
 <div class="main">
 {% for question ,point in zipped_questions_points %}
+  {% if question.id in solved_questions %}
+  {% endif %}
 <div class="question_panel col-xs-6 col-sm-4">
 <div class="panel panel-default">
   <div class="panel-heading clearfix">
     <h3 class="panel-title pull-left">{{ question.title }}</h3>
+    {% if not question.id in solved_questions %}
       <a class="btn pull-right" href="{% url 'scoreserver:question_detail' question.id %}">
-	<i style="font-size:2em" class="material-icons">pageview</i>
+        <i style="font-size:2em" class="material-icons">pageview</i>
       </a>
+    {% else %}
+      <a class="btn pull-right" style="color:green" onclick="alert('You had already done this problem!')">
+        <i style="font-size:2em" class="material-icons">done</i>
+      </a>
+    {% endif %}
     </div>
     <div class="list-group">
       <div class="list-group-item">
@@ -23,7 +31,7 @@
       </div>
       <div class="list-group-item">
 	<h4 class="list-group-item-heading">Point</h4>
-        <p class="list-group-item-text">{{ question.point }}</p>
+        <p class="list-group-item-text">{{ point }}</p>
       </div>
     </div>
 </div>
