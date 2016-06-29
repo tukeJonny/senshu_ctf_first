@@ -82,9 +82,11 @@ def get_ranking_info(request):
     :return: 全ユーザ数及びrequest.userの現在のランクのタプル
     """
     all_user = list(User.objects.filter(is_superuser=False, is_staff=False))
-    #import pdb; pdb.set_trace()
     all_user_num = len(all_user)
-    login_user_rank = all_user.index(request.user)+1 #0,1,2,... -> 1,2,3,...
+    try:
+        login_user_rank = all_user.index(request.user)+1 #0,1,2,... -> 1,2,3,...
+    except ValueError:
+        login_user_rank = -1
     return(all_user_num,login_user_rank)
 
 def is_already_attacked(user, question_id):
@@ -97,7 +99,10 @@ def is_already_attacked(user, question_id):
     """
     question = Question.objects.get(pk=question_id)
     #フラグを提出したユーザが今までに攻撃成功した履歴を引っ張ってくる
-    attack_point_history = AttackPointHistory.objects.filter(user=user)
+    try:
+        attack_point_history = AttackPointHistory.objects.filter(user=user)
+    except Exception:
+        attack_point_history = []
     return question in [aph.question for aph in attack_point_history]
 
 def get_user_solved_questions(user):
@@ -106,5 +111,8 @@ def get_user_solved_questions(user):
     :return: userが解いた問題の一覧の配列
     """
     #対象ユーザの攻撃成功履歴を取得
-    aphs = AttackPointHistory.objects.filter(user=user)
+    try:
+        aphs = AttackPointHistory.objects.filter(user=user)
+    except Exception:
+        aphs = []
     return [aph.question.id for aph in list(aphs)]

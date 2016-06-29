@@ -3,7 +3,7 @@
     <head>
         <title>ログアウト</title>
     </head>
-    <body onload="setTimeout(function(){location.href='{% url 'scoreserver:index' %}';}, 3000);">
+    <body onload="setTimeout(function(){location.href='{% url 'scoreserver:index' %}';}, 1000);">
     {% if logout %}
         <h3 class="page-header">ログアウトしました。</h3>
     {% else %}

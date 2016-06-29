@@ -45,7 +45,7 @@ def index(request):
 # --- login and logout
 
 def login_view(request):
-    template_name = reverse('scoreserver:index')
+    template_name = reverse('scoreserver:questions')
     #nextが指定されていれば、そこにリダイレクトさせるようにする
     if 'next' in request.GET.keys():
         template_name = request.GET['next']

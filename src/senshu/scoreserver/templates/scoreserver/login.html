@@ -25,11 +25,10 @@
       {% csrf_token %}
     </form>
     {% else %}
-    <strong style="color:red;">You had already logged in!!</strong>
-    <h1>{{ user }}</h1>
-    <!--<script>
-      setTimeout(function(){location.href="{% url 'scoreserver:index' %}";}, 3000);
-    </script>!-->
+    <strong style="color:red;">You had already logged in as {{ user }}!!</strong>
+    <script>
+      setTimeout(function(){location.href="{% url 'scoreserver:index' %}";}, 1000);
+    </script>
     {% endif %}
   </div>
 </body>

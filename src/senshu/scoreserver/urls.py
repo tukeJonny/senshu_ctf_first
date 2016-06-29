@@ -7,19 +7,23 @@ from .views import QuestionDetailView
 from .views import ScoreBoardView, WebView, NetworkView, CryptoView, ForensicsView, BinaryView, MiscView
 from .views import RegisterView, UserUpdateView
 
-#auth_view.login, {'template_name': "scoreserver/login.html"}
-
 app_name = 'scoreserver'
 urlpatterns = [
+    #index page
     url(r'^index/$', views.index, name="index"),
+    #login and logout
     url(r'^login', views.login_view, name="login"),
     url(r'^logout/$', views.logout_view,  name="logout"),
+    #scoreboard
     url(r'^scoreboard/$', ScoreBoardView.as_view(), name="scoreboard"),
+    #User create, update, delete
     url(r'^register/$', RegisterView.as_view(), name="register"),
     url(r'^profile/$', UserUpdateView.as_view(), name="profile"),
+    #flag submit
+    url(r'^submit/(?P<question_id>\d+)/$', views.flag_submit_view, name="submit"),
+    #question list, detail, each category
     url(r'^questions/$', QuestionListView.as_view(), name="questions"),
     url(r'^question_detail/(?P<pk>\d+)/$', QuestionDetailView.as_view(), name="question_detail"),
-    url(r'^submit/(?P<question_id>\d+)/$', views.flag_submit_view, name="submit"),
     url(r'^web/$', WebView.as_view(), name="web"),
     url(r'^network/$', NetworkView.as_view(), name="network"),
     url(r'^crypt/$', CryptoView.as_view(), name="crypt"),
