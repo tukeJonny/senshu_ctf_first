@@ -37,6 +37,8 @@ class UserManager(BaseUserManager):
         print("create user!")
         if not username:
             raise ValueError("Users must have username!!")
+        if len(User.objects.filter(username=username)) > 0:
+            raise ValueError("This user had already registered!!")
 
         user = self.model(username=username)
         user.set_password(password)
@@ -56,7 +58,7 @@ class User(AbstractBaseUser):
         ordering = ("-points",)
         db_table = 'scoreserver_user'
 
-    username = models.CharField(default='', max_length=50, unique=False) #システムエラー回避のためunique=Trueを指定
+    username = models.CharField(default='', max_length=50, unique=False)
     #password = models.CharField(max_length=128, verbose_name="パスワードハッシュ")
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)

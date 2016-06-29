@@ -14,7 +14,7 @@ from .models import Question, Flag, AnswerHistory, AttackPointHistory
 from .forms import UserUpdateForm
 from django.contrib.auth import get_user_model
 User = get_user_model()
-from scoreserver.helpers import FlagSubmit, get_ranking_info, is_already_attacked, get_user_solved_questions
+from scoreserver.helpers import FlagSubmit, get_ranking_info, is_already_attacked, get_user_solved_questions, is_already_exist_user
 from django.db import connection
 
 # Create your views here.
@@ -108,6 +108,9 @@ class RegisterView(generic.edit.CreateView):
     def form_valid(self, form):
         username = self.request.POST["username"]
         password = self.request.POST["password"]
+        if is_already_exist_user(username):
+            messages.warning(self.request, "This user had already registered!!")
+            return redirect(reverse_lazy("scoreserver:register"))
         result = super(RegisterView, self).form_valid(form)
         #super.form_validでは生パスワードを設定してしまうため、こちら側で行う
         registered_user = User.objects.get(username=username)

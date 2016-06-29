@@ -116,3 +116,11 @@ def get_user_solved_questions(user):
     except Exception:
         aphs = []
     return [aph.question.id for aph in list(aphs)]
+
+def is_already_exist_user(username):
+        """
+        同じusernameのユーザの登録を許さない
+        :param username: User.username
+        :return: 既に登録されているか、その真偽値
+        """
+        return len(User.objects.filter(username=username)) > 0

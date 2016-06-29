@@ -8,6 +8,9 @@
 <body>
   <div class="wrapper">
     <form class="form-signin" method="post" action="">
+      {% for message in messages %}
+        <strong style="color:red;">{{ message }}</strong>
+      {% endfor %}
       {{ form.as_p }}
       {% csrf_token %}
       <input type="submit" value="Create"/>

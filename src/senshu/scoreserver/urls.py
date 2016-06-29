@@ -18,7 +18,7 @@ urlpatterns = [
     url(r'^scoreboard/$', ScoreBoardView.as_view(), name="scoreboard"),
     #User create, update, delete
     url(r'^register/$', RegisterView.as_view(), name="register"),
-    url(r'^profile/$', UserUpdateView.as_view(), name="profile"),
+    url(r'^profile/(?P<pk>\d+)/$', UserUpdateView.as_view(), name="profile"),
     #flag submit
     url(r'^submit/(?P<question_id>\d+)/$', views.flag_submit_view, name="submit"),
     #question list, detail, each category
