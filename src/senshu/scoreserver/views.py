@@ -11,6 +11,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.template.context import RequestContext
 from django.template.loader import get_template
 from .models import Question, Flag, AnswerHistory, AttackPointHistory
+from .forms import UserUpdateForm
 from django.contrib.auth import get_user_model
 User = get_user_model()
 from scoreserver.helpers import FlagSubmit, get_ranking_info, is_already_attacked, get_user_solved_questions
@@ -35,11 +36,13 @@ from django.db import connection
 #ログアウトボタン欲しいので、サイドバーに追加するなりして欲しい
 #サイドバーだけでなくトップバーを用意し、そこにログアウトボタンとか
 
-#Memos
-#@login_requiredデコレータをつけることで、認証が必要なビューを定義できる
+# --- index page ---
+
 def index(request):
     context = {}
     return render(request, 'scoreserver/index.html', context)
+
+# --- login and logout
 
 def login_view(request):
     template_name = reverse('scoreserver:index')
@@ -72,6 +75,8 @@ def logout_view(request):
     logout(request)
     return render(request, template_name, {"logout": True})
 
+# --- Flag submit ---
+
 @login_required(login_url="/scoreserver/login")
 def flag_submit_view(request, question_id):
     context = {}
@@ -91,7 +96,7 @@ def flag_submit_view(request, question_id):
         messages.warning(request, "You're already attacked this question.")
     return HttpResponseRedirect(reverse('scoreserver:question_detail', args=(question_id,)))
 
-
+# --- User Views (Register, Update, Delete) ---
 
 class RegisterView(generic.edit.CreateView):
     template_name = "scoreserver/register.html"
@@ -125,17 +130,29 @@ class RegisterView(generic.edit.CreateView):
         messages.warning(self.request, "Can't saved...")
         return super().form_invalid(form)
 
-#class UserUpdateView(generic.edit.UpdateView):
+class UserUpdateView(LoginRequiredMixin, generic.edit.UpdateView):
+    model = User
+    form_class = UserUpdateForm
+    template_name = "scoreserver/profile.html"
 
-#---------- sidebar zone -------
+    def get_queryset(self):
+        import pdb; pdb.set_trace()
+        queryset = super(UserUpdateView, self).get_queryset()
+        return queryset.filter(pk=self.request.user.pk)
 
-class BaseTemplateView(generic.TemplateView):
-    """
-    問題を表示する画面やスコアボードのビューに対する基底クラス
-    """
     def get_context_data(self, **kwargs):
-        context = super(BaseTemplateView, self).get_context_data(**kwargs)
-        context['all_user_num'], context['login_user_rank'] = get_ranking_info(request)
+        context = super(UserUpdateView, self).get_context_data(**kwargs)
+        context['form'] = self.form_class(self.request.GET, instance=self.request.user)
+        return context
+
+    def get(self, request, *args, **kwargs):
+        import pdb; pdb.set_trace()
+        super(UserUpdateView, self).get(request, *args, **kwargs)
+        form = self.form_class
+        context = self.get_context_data(object=self.object, form=form)
+        return self.render_to_response(context)
+
+# --- Question Views ---
 
 class QuestionListView(LoginRequiredMixin, generic.ListView):
     login_url = '/scoreserver/login'
@@ -145,8 +162,11 @@ class QuestionListView(LoginRequiredMixin, generic.ListView):
 
     def get_context_data(self, **kwargs):
         context = super(QuestionListView, self).get_context_data(**kwargs)
+        #for sidebar
         request = context['view'].request
-        #context['all_user_num'], context['login_user_rank'] = get_ranking_info(request)
+        context['all_user_num'], context['login_user_rank'] = get_ranking_info(request)
+
+        #for question, questions
         context['solved_questions'] = get_user_solved_questions(self.request.user)
         questions = Question.objects.all() #配列
         #DoesNotExist例外ハンドラを書くべき
@@ -162,10 +182,13 @@ class ScoreBoardView(LoginRequiredMixin, generic.TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(ScoreBoardView, self).get_context_data(**kwargs)
-        context["title"] = "scoreboard"
-        context["users"] = User.objects.filter(is_superuser=False, is_staff=False)#.order_by('-points')
+        #for sidebar
         request = context['view'].request
         context['all_user_num'], context['login_user_rank'] = get_ranking_info(request)
+
+        #for scoreboard
+        context["title"] = "scoreboard"
+        context["users"] = User.objects.filter(is_superuser=False, is_staff=False)#.order_by('-points')
         return context
 
 class QuestionDetailView(LoginRequiredMixin, generic.DetailView):
@@ -175,8 +198,11 @@ class QuestionDetailView(LoginRequiredMixin, generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(QuestionDetailView, self).get_context_data(**kwargs)
+        #for sidebar
         request = context['view'].request
         context['all_user_num'], context['login_user_rank'] = get_ranking_info(request)
+
+        #for question_detail
         context['title'] = "Question Detail"
         return context
 
@@ -185,6 +211,7 @@ class CategoryTemplateView(LoginRequiredMixin, generic.TemplateView):
     model = Question
     def get_context_data(self, **kwargs):
         context = super(CategoryTemplateView, self).get_context_data(**kwargs)
+        #for sidebar
         request = context['view'].request
         context['all_user_num'], context['login_user_rank'] = get_ranking_info(request)
         context['solved_questions'] = get_user_solved_questions(self.request.user)
@@ -203,6 +230,7 @@ class WebView(CategoryTemplateView):
     template_name = "scoreserver/question.html"
     def get_context_data(self, **kwargs):
         context = super(WebView, self).get_context_data(**kwargs)
+        #for question
         context["title"] = "Web"
         context['zipped_questions_points'] = self.get_zipped_context_data("Web")
         return context
@@ -211,6 +239,7 @@ class NetworkView(CategoryTemplateView):
     template_name = "scoreserver/question.html"
     def get_context_data(self, **kwargs):
         context = super(NetworkView, self).get_context_data(**kwargs)
+        #for question
         context["title"] = "Network"
         context['zipped_questions_points'] = self.get_zipped_context_data("Network")
         return context
@@ -219,6 +248,7 @@ class CryptoView(CategoryTemplateView):
     template_name = "scoreserver/question.html"
     def get_context_data(self, **kwargs):
         context = super(CryptoView, self).get_context_data(**kwargs)
+        #for question
         context["title"] = "Crypto"
         context['zipped_questions_points'] = self.get_zipped_context_data("Crypto")
         return context
@@ -227,6 +257,7 @@ class ForensicsView(CategoryTemplateView):
     template_name = "scoreserver/question.html"
     def get_context_data(self, **kwargs):
         context = super(ForensicsView, self).get_context_data(**kwargs)
+        #for question
         context["title"] = "Forensics"
         context['zipped_questions_points'] = self.get_zipped_context_data("Forensics")
         return context
@@ -235,6 +266,7 @@ class BinaryView(CategoryTemplateView):
     template_name = "scoreserver/question.html"
     def get_context_data(self, **kwargs):
         context = super(BinaryView, self).get_context_data(**kwargs)
+        #for question
         context["title"] = "Binary"
         context['zipped_questions_points'] = self.get_zipped_context_data("Binary")
         return context
@@ -243,6 +275,7 @@ class MiscView(CategoryTemplateView):
     template_name = "scoreserver/question.html"
     def get_context_data(self, **kwargs):
         context = super(MiscView, self).get_context_data(**kwargs)
+        #for question
         context["title"] = "Misc"
         context['zipped_questions_points'] = self.get_zipped_context_data("Misc")
         return context

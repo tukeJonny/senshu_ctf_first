@@ -5,7 +5,7 @@ from . import views
 from .views import QuestionListView
 from .views import QuestionDetailView
 from .views import ScoreBoardView, WebView, NetworkView, CryptoView, ForensicsView, BinaryView, MiscView
-from .views import RegisterView
+from .views import RegisterView, UserUpdateView
 
 #auth_view.login, {'template_name': "scoreserver/login.html"}
 
@@ -16,6 +16,7 @@ urlpatterns = [
     url(r'^logout/$', views.logout_view,  name="logout"),
     url(r'^scoreboard/$', ScoreBoardView.as_view(), name="scoreboard"),
     url(r'^register/$', RegisterView.as_view(), name="register"),
+    url(r'^profile/$', UserUpdateView.as_view(), name="profile"),
     url(r'^questions/$', QuestionListView.as_view(), name="questions"),
     url(r'^question_detail/(?P<pk>\d+)/$', QuestionDetailView.as_view(), name="question_detail"),
     url(r'^submit/(?P<question_id>\d+)/$', views.flag_submit_view, name="submit"),

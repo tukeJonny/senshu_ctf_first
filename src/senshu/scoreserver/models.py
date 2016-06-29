@@ -3,15 +3,6 @@ from django.db import models
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
-# Create your models here.
-# class Notice(models.Model):
-#     """ CTF中のお知らせなど """
-#     title = models.CharField(max_length=50)
-#     description = models.TextField(default='')
-#
-#     def __str__(self):
-#         return "<Notice: {title}, {description}>".format(title=self.title, description=self.description)
-
 class Category(models.Model):
     """ 問題のカテゴリ """
     name = models.CharField(default='', max_length=50, unique=True)
@@ -118,7 +109,7 @@ class AttackPointHistory(models.Model):
     point = models.IntegerField("得点")
 
     def __str__(self):
-        return "[+] {user}が{question_title}の正解フラグをSubmitし、{point}獲得しました.".format(user=self.user.username, question_title=self.question.title, point=self.point)
+        return "[+] {user}が{question_title}の正解フラグをSubmitし、{point}pt 獲得しました.".format(user=self.user.username, question_title=self.question.title, point=self.point)
 
 class AnswerHistory(models.Model):
     """ 回答履歴（成功しているかに関わらず） """
