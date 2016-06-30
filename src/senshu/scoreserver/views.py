@@ -50,7 +50,6 @@ def login_view(request):
     #nextが指定されていれば、そこにリダイレクトさせるようにする
     if 'next' in request.GET.keys():
         template_name = request.GET['next']
-
     context=RequestContext(request, {})
     user = None
     if request.POST: #ログインPOSTしてきているのであれば
@@ -61,11 +60,16 @@ def login_view(request):
         if user is not None: #認証成功かつ
             if user.is_active: #Userが有効
                 login(request, user) #ログイン
+                if "rememberMe" in request.POST:
+                    request.session.set_expiry(2*7*24*60*60) # 2weeks (django default value)
+                else:
+                    request.session.set_expiry(5*60) #5 minutes
                 return HttpResponseRedirect(template_name) #リダイレクト
             else:
                 context['is_inactive'] = True #Userが無効である旨
         else:
             context['login_failed'] = True #ログイン失敗である旨
+
     context['title'] = "login"
     context['request'] = request
     context['checked_user'] = user #確認済みのユーザ(Template側で認証済みユーザオブジェクトと分けるため)
