@@ -143,6 +143,10 @@ class UserUpdateView(LoginRequiredMixin, generic.edit.UpdateView):
     def form_valid(self, form):
         username = self.request.POST["username"]
         password = self.request.POST["password"]
+        #ユーザ名が変更ありで、既にその新しいユーザ名のユーザが存在していたらダメ
+        if self.request.user.username != username and is_already_exist_user(username):
+            messages.warning(self.request, "This user had already registered!!")
+            return redirect(reverse_lazy("scoreserver:profile", kwargs={"pk": self.request.user.pk}))
         result = super(UserUpdateView, self).form_valid(form)
         if result: #フォームのバリデーションに引っかからなかったら、一緒にログイン処理もこちら側で行ってしまう
             #super.form_validでは生パスワードを設定してしまうため、こちら側で行う
