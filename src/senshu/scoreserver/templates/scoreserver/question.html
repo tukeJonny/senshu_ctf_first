@@ -1,3 +1,4 @@
+{% load staticfiles %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,9 +10,9 @@
     <title>{{ title }}</title>
 </head>
 <body>
-<div class="main">
+<div id="particles-js" class="main">
 {% for question ,point in zipped_questions_points %}
-<div class="question_panel col-xs-6 col-sm-4">
+<div class="question_panel col-xs-6 col-sm-4" style="z-index: 0;">
 <div class="panel panel-default">
   <div class="panel-heading clearfix">
     <h3 class="panel-title pull-left">{{ question.title }}</h3>
@@ -38,6 +39,8 @@
 </div>
 </div>
 {% endfor %}
+  <script src="https://raw.githubusercontent.com/VincentGarreau/particles.js/master/particles.min.js"></script>
+<script src="{% static 'js/app.js' %}"></script>
 <!--
     <table class="table table-striped">
         <thead>
@@ -61,5 +64,6 @@
     </table>
 -->
 </div>
+
 </body>
 </html>
