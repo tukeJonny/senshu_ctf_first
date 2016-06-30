@@ -106,11 +106,11 @@ class RegisterView(generic.edit.CreateView):
             messages.warning(self.request, "This user had already registered!!")
             return redirect(reverse_lazy("scoreserver:register"))
         result = super(RegisterView, self).form_valid(form)
-        #super.form_validでは生パスワードを設定してしまうため、こちら側で行う
-        registered_user = User.objects.get(username=username)
-        registered_user.set_password(password)
-        registered_user.save()
         if result: #フォームのバリデーションに引っかからなかったら、一緒にログイン処理もこちら側で行ってしまう
+            #super.form_validでは生パスワードを設定してしまうため、こちら側で行う
+            registered_user = User.objects.get(username=username)
+            registered_user.set_password(password)
+            registered_user.save()
             messages.success(self.request, "Saved {}!".format(username))
             if self.request.user.is_authenticated(): #ログイン済みであれば
                 logout(self.request) #一旦ログアウト
@@ -126,7 +126,7 @@ class RegisterView(generic.edit.CreateView):
 
     def form_invalid(self, form):
         messages.warning(self.request, "Can't saved...")
-        return super().form_invalid(form)
+        return super(RegisterView, self).form_invalid(form)
 
 class UserUpdateView(LoginRequiredMixin, generic.edit.UpdateView):
     """
@@ -143,15 +143,13 @@ class UserUpdateView(LoginRequiredMixin, generic.edit.UpdateView):
     def form_valid(self, form):
         username = self.request.POST["username"]
         password = self.request.POST["password"]
-        if is_already_exist_user(username):
-            messages.warning(self.request, "This user had already registered!!")
-            return redirect(reverse_lazy("scoreserver:profile"))
         result = super(UserUpdateView, self).form_valid(form)
-        #super.form_validでは生パスワードを設定してしまうため、こちら側で行う
-        updated_user = User.objects.get(username=username)
-        updated_user.set_password(password)
-        updated_user.save()
         if result: #フォームのバリデーションに引っかからなかったら、一緒にログイン処理もこちら側で行ってしまう
+            #super.form_validでは生パスワードを設定してしまうため、こちら側で行う
+            updated_user = User.objects.get(username=self.request.user.username)
+            updated_user.username = username
+            updated_user.set_password(password)
+            updated_user.save()
             messages.success(self.request, "Saved {}!".format(username))
             if self.request.user.is_authenticated(): #ログイン済みであれば
                 logout(self.request) #一旦ログアウト
