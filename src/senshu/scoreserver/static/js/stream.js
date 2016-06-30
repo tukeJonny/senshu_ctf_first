@@ -446,14 +446,19 @@ var stream_message =  ''+
 '[   15.822387] IPv6: ADDRCONF(NETDEV_CHANGE): eth1: link becomes ready\n'
 var stream_array = stream_message.split('\n');
 stream_counter=0;
+stream_loop=1;
+first_loop=true;
 function Stream(){
-  $("#stream_text").append(stream_array[stream_counter]+'</br>');
   stream_counter++;
-  if(stream_counter === stream_array.length){
-    stream_counter=0;
-  }
-  if($(".screen").height() <= $("#stream_text").height()){
-    clearInterval(stream_interval);
+  if(first_loop){
+    $("#stream_text").append('<p>'+stream_array[stream_counter]+'</p>');
+    if($(".screen").height() <= $("#stream_text").height()){
+      stream_loop = stream_counter;
+      first_loop = false;
+    }
+  }else{
+    var tmp = $("#stream_text").children()[stream_counter%stream_loop];
+    $(tmp).text(stream_array[stream_counter]);
   }
 }
-stream_interval = setInterval(Stream,1000);
+stream_interval = setInterval(Stream,250);
