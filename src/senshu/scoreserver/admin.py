@@ -6,13 +6,6 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 # Register your models here.
 
-# class NoticeAdmin(admin.ModelAdmin):
-#     fieldsets = [
-#         (None, {'fields': ['title', 'description']})
-#     ]
-#     list_display = ('title', 'description')
-#     search_fields = ['title']
-
 class CategoryAdmin(admin.ModelAdmin):
     fieldsets = [
         ("Category Name", {'fields': ['name']})

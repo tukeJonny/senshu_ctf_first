@@ -21,17 +21,6 @@ from django.db import connection
 
 #競技中に行われ無いような操作は<Option>
 #Todos
-#インデックスページ作成
-#問題一覧作成
-#問題詳細画面作成(フラグ提出フォームがある)
-#ランキング画面作成(Userの獲得ポイントを元に並べてやればおk
-#ユーザ登録(CreateUserView)の作成
-#<Option>ユーザ登録情報変更(UpdateUserView)の作成
-#<Option>ユーザ削除
-#フラグが送信されたらそれを受けるCreateAnswerHistoryViewを作って、
-#フラグ判定、正解であればAttackPointHistoryを追加、ユーザのPoint計算
-#フラグ提出と同じページに飛ばしてCongraturations!って表示
-#不正解であれば、フラグ提出ページに飛ばしてWrong...って表示
 #問題詳細画面、ちょっと上に寄りすぎ。見辛い
 #ログアウトボタン欲しいので、サイドバーに追加するなりして欲しい
 #サイドバーだけでなくトップバーを用意し、そこにログアウトボタンとか
