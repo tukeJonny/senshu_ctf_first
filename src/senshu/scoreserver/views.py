@@ -25,6 +25,7 @@ from django.db import connection
 #ログアウトボタン欲しいので、サイドバーに追加するなりして欲しい
 #サイドバーだけでなくトップバーを用意し、そこにログアウトボタンとか
 #ログイン時、Remember me 処理
+#particle js
 
 # --- index page ---
 
