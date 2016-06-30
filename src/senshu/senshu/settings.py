@@ -83,7 +83,6 @@ DATABASES = {
     }
 }
 
-
 #AUTH_USER_MODEL = "scoreserver.User"
 
 # Password validation
