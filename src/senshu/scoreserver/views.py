@@ -26,6 +26,7 @@ from django.db import connection
 #サイドバーだけでなくトップバーを用意し、そこにログアウトボタンとか
 #ログイン時、Remember me 処理
 #particle js
+#問題にラベルを追加する。楕円に白文字
 
 # --- index page ---
 
