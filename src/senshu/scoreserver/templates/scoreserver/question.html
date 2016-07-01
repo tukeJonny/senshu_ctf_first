@@ -12,13 +12,16 @@
 <body>
 <div id="particles-js" class="main">
 {% for question ,point in zipped_questions_points %}
-<div class="question_panel col-xs-6 col-sm-4" style="z-index: 0;">
+<div class="question_panel col-xs-6 col-sm-4" style="z-index:0;">
 <div class="panel panel-default">
   <div class="panel-heading clearfix">
-    <h3 class="panel-title pull-left">{{ question.title }}</h3>
+    <h3 class="panel-title pull-left" style="width:100%">
+      {{ question.title }}</br>
+    </h3>
+    <span class="label label-info pull-left">{{question.category}}</span>
       {% if not question.id in solved_questions %}
       <a class="btn pull-right" href="{% url 'scoreserver:question_detail' question.id %}">
-        <i style="font-size:2em" class="material-icons">pageview</i>
+        <i style="font-size:30px;z-index:0;" class="material-icons">pageview</i>
       </a>
     {% else %}
       <a class="btn pull-right" style="color:green" onclick="alert('You had already done this problem!')">

@@ -14,7 +14,10 @@
 <div class="question_panel col-xs-6 col-sm-4">
 <div class="panel panel-default">
   <div class="panel-heading clearfix">
-    <h3 class="panel-title pull-left">{{ question.title }}</h3>
+    <h3 class="panel-title pull-left" style="width:100%">
+      {{ question.title }}
+    </h3>
+    <span class="label label-info pull-left">{{question.category}}</span>
     {% if not question.id in solved_questions %}
       <a class="btn pull-right" href="{% url 'scoreserver:question_detail' question.id %}">
         <i style="font-size:2em" class="material-icons">pageview</i>
