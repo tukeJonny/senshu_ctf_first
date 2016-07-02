@@ -26,6 +26,7 @@ from django.db import connection
 #サイドバーだけでなくトップバーを用意し、そこにログアウトボタンとか
 #ログイン時、Remember me 処理
 #particle js
+#問題それぞれにジャンルをつけてわかりやすくしてほしい
 
 # --- index page ---
 
