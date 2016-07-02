@@ -14,6 +14,7 @@ function htmlbodyHeightUpdate(){
 }
   $(document).ready(function () {
     htmlbodyHeightUpdate()
+    ActiveRow();
     $( window ).resize(function() {
       htmlbodyHeightUpdate()
     });
@@ -22,3 +23,7 @@ function htmlbodyHeightUpdate(){
         htmlbodyHeightUpdate()
     });
   });
+function ActiveRow(){
+  var active_name = document.title.toLowerCase();
+  $("#side-"+active_name).addClass("side-active");
+}
