@@ -30,6 +30,10 @@ SECRET_KEY = '3q1of!^5_%#)h044@8whscn2u)yv36ijdpskk932^98$o8j6qj'
 #Develop
 DEBUG=True
 
+#Slack Incoming Webhook URL
+SUCCESS_LOG_INCOMING_URL = None
+FAIL_LOG_INCOMING_URL = None
+
 # Application definition
 
 INSTALLED_APPS = [
