@@ -22,8 +22,7 @@ from django.db import connection
 #競技中に行われ無いような操作は<Option>
 #Todos
 #ログイン時、Remember me 処理
-#particle js
-#サイドバーに今の位置をわかりやすくする。
+#flag投稿時のモーダル
 
 # --- index page ---
 
