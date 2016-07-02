@@ -23,7 +23,6 @@ from django.db import connection
 #Todos
 #ログイン時、Remember me 処理
 #particle js
-#問題にラベルを追加する。楕円に白文字
 #サイドバーに今の位置をわかりやすくする。
 
 # --- index page ---
@@ -198,6 +197,7 @@ class QuestionListView(LoginRequiredMixin, generic.ListView):
         #for sidebar
         request = context['view'].request
         context['all_user_num'], context['login_user_rank'] = get_ranking_info(request)
+        context['title'] = "questions"
 
         #for question, questions
         context['solved_questions'] = get_user_solved_questions(self.request.user)
