@@ -10,13 +10,13 @@
   <nav class="navbar navbar-inverse sidebar" role="navigation">
     <div class="container-fluid">
       <div class="navbar-header">
-        <a class="navbar-brand" id="sidebar_scoreboard" href="{% url 'scoreserver:scoreboard' %}">ScoreBoard <br></a>
+        <a class="navbar-brand" id="side-scoreboard" href="{% url 'scoreserver:scoreboard' %}">ScoreBoard <br></a>
 	    <a class="navbar-brand" href="{% url 'scoreserver:scoreboard' %}"> {{ login_user_rank }} / {{ all_user_num }} <i class="fa fa-line-chart"></i></a>
         <small class="navbar-brand"> {{ user.points }}pt </small>
       </div>
       <ul class="nav navbar-nav">
 	<li>
-          <a id="sidebar_problems" href="{% url 'scoreserver:questions' %}">Questions</a>
+          <a id="side-questions" href="{% url 'scoreserver:questions' %}">Questions</a>
         </li>
     <li>
         <li>
@@ -25,32 +25,32 @@
           </a>
         </li>
         <li> 
-          <a href="{% url 'scoreserver:web' %}">Web
+          <a id="side-web" href="{% url 'scoreserver:web' %}">Web
             <span style="font-size:16px;" class="pull-right hidden-xs showopacity fa fa-newspaper-o"></span>
           </a>
         </li>
 	    <li >
-          <a href="{% url 'scoreserver:network' %}">Network
+          <a id="side-network" href="{% url 'scoreserver:network' %}">Network
             <span style="font-size:16px;" class="pull-right hidden-xs showopacity fa fa-wifi"></span>
           </a>
         </li>
         <li >
-          <a href="{% url 'scoreserver:crypt' %}">Crypt
+          <a id="side-crypt" href="{% url 'scoreserver:crypt' %}">Crypt
             <span style="font-size:24px;" class="pull-right hidden-xs showopacity fa fa-lock"></span>
           </a>
         </li>
 	<li>
-          <a href="{% url 'scoreserver:forensics' %}">Forensics
+          <a id="side-forensics" href="{% url 'scoreserver:forensics' %}">Forensics
             <span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-export"></span>
           </a>
         </li>
 	<li>
-          <a href="{% url 'scoreserver:reversing' %}">Reversing
+          <a id="side-reversing" href="{% url 'scoreserver:reversing' %}">Reversing
             <span class="pull-right hidden-xs showopacity"><i style="font-size:18px" class="material-icons">memory</i></span>
           </a>
         </li>
 	<li>
-          <a href="{% url 'scoreserver:misc' %}">Misc
+          <a id="side-misc" href="{% url 'scoreserver:misc' %}">Misc
             <span class="pull-right hidden-xs showopacity"><i style="font-size:18px" class="material-icons">folder</i></span>
           </a>
         </li>

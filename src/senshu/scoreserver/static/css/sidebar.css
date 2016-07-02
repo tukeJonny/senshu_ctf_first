@@ -150,8 +150,12 @@
 		padding-left: 15px;
 	}
 
-#sidebar_problems , #sidebar_scoreboard{
+#side-questions , #side-scoreboard{
 	height:50px;
 	font-size:4ex;
 	text-align:center;
+}
+.side-active{
+	color:#800000;
+	background-color:#800000;
 }
