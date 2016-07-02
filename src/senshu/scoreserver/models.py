@@ -117,6 +117,7 @@ class AnswerHistory(models.Model):
     user = models.ForeignKey(User, verbose_name="回答者")
     question = models.ForeignKey(Question, verbose_name="問題")
     submit_flag = models.CharField(max_length=50, verbose_name="提出フラグ")
+    #正解フラグもあったほうが良い？
 
     def __str__(self):
         return "[-] {user}が{question_title}のフラグ({submit_flag})をSubmitしました.".format(user=self.user.username, question_title=self.question.title, submit_flag=self.submit_flag)

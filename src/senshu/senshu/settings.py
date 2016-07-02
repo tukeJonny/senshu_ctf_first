@@ -31,8 +31,17 @@ SECRET_KEY = '3q1of!^5_%#)h044@8whscn2u)yv36ijdpskk932^98$o8j6qj'
 DEBUG=True
 
 #Slack Incoming Webhook URL
+#Flag Correct
 SUCCESS_LOG_INCOMING_URL = None
+SUCCESS_LOG_INCOMING_IMAGE_URL = "http://p.twpl.jp/show/orig/aqrNm"
+SUCCESS_LOG_INCOMING_CHANNEL = "#sample_channel"
+SUCCESS_LOG_INCOMING_NAME = "success_log"
+
+#Flag Incorrect
 FAIL_LOG_INCOMING_URL = None
+FAIL_LOG_INCOMING_IMAGE_URL = "http://p.twpl.jp/show/orig/aqrNm"
+FAIL_LOG_INCOMING_CHANNEL = "#sample_channel"
+FAIL_LOG_INCOMING_NAME = "fail_log"
 
 # Application definition
 

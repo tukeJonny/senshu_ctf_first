@@ -61,7 +61,7 @@ class FlagSubmit(object):
         #Question
         self.question.solved += 1
         self.question.save()
-        post_to_slack("#jvn_alert", "success_log",settings.SUCCESS_LOG_INCOMING_URL, str(aph), "http://p.twpl.jp/show/orig/aqrNm")
+        post_to_slack(settings.SUCCESS_LOG_INCOMING_CHANNEL, settings.SUCCESS_LOG_INCOMING_NAME,settings.SUCCESS_LOG_INCOMING_URL, str(aph), settings.SUCCESS_LOG_INCOMING_IMAGE_URL)
 
     def fail(self):
         """
@@ -73,7 +73,7 @@ class FlagSubmit(object):
         #AnswerHistory
         ah = AnswerHistory(user=self.user, question=self.question, submit_flag=self.flag_str)
         ah.save()
-        post_to_slack("#jvn_alert", "fail_log",settings.FAIL_LOG_INCOMING_URL, str(ah), "http://p.twpl.jp/show/orig/aqrNm")
+        post_to_slack(settings.FAIL_LOG_INCOMING_CHANNEL, settings.FAIL_LOG_INCOMING_NAME,settings.FAIL_LOG_INCOMING_URL, str(ah), settings.FAIL_LOG_INCOMING_IMAGE_URL)
 
 
 def get_ranking_info(request):
