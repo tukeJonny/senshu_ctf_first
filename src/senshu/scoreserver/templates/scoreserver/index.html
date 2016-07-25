@@ -5,20 +5,20 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
     <script src="{% static 'js/stream.js' %}"></script>
     <link rel="stylesheet" href="{% static 'css/cathode-ray_tube.css' %}">
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
 </head>
 <body>
 <input id="switch" type="checkbox" checked=""/>
 <label for="switch" class="switch-label">Power </label>
 <div class="container">
   <div class="screen">
-    <div id="right" style="width:40%;float:right;">
-      <div id="stream_text" style="text-align:right; color:green;"></div>
+    <div id="right" >
+      <div id="stream_text" ></div>
     </div>
-    <div id="main" style="width:20%;">
+    <div id="main" >
     <h3>Hello SENSHU-CTF</h3>
     {% if user.is_authenticated %}
         <p>Hello! {{ user.get_username }}</p>
-
     {% endif %}
     {% if messages %}
         <ul class="messages">
@@ -27,10 +27,10 @@
             {% endfor %}
         </ul>
     {% endif %}
-    <a href="{% url 'scoreserver:questions' %}">Questions</a>
-    <a href="{% url 'scoreserver:login' %}">Login</a>
-    <a href="{% url 'scoreserver:logout' %}">Logout</a>
-    <a href="{% url 'scoreserver:register' %}">Register</a>
+    <a href="{% url 'scoreserver:questions' %}"><img src="{% static 'images/Questions.png' %}"></a>
+    <a href="{% url 'scoreserver:login' %}"><img src="{% static 'images/Login.png' %}"></a>
+    <a href="{% url 'scoreserver:logout' %}"><img src="{% static 'images/Logout.png' %}"></a>
+    <a href="{% url 'scoreserver:register' %}"><img src="{% static 'images/Register.png' %}"></a>
     </div>
   </div>
   <div class="overlay">Video1</div>

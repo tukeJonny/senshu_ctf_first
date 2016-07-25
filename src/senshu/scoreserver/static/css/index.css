@@ -1,0 +1,24 @@
+#main {
+    width:20%;
+    z-index:1;
+}
+#right{
+    width:40%;
+    float:right;
+    z-index:-1;
+}
+#stream_text{
+    text-align:right; 
+    color:green;
+}
+#left{
+    width:20%;
+    text-align:left;
+}
+#main {
+    text-align: center;
+}
+img{
+    height:4em;
+    width:auto;
+}
