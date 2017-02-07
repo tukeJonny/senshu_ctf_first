@@ -8,11 +8,11 @@ from django.views import generic
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.template.context import RequestContext
 from django.template.loader import get_template
 from .models import Question, Flag, AnswerHistory, AttackPointHistory, Hint
-from .forms import UserUpdateForm
 from django.contrib.auth import get_user_model
 User = get_user_model()
 from scoreserver.helpers import FlagSubmit, get_ranking_info, is_already_attacked, get_user_solved_questions, is_already_exist_user
@@ -54,7 +54,7 @@ def login_view(request):
                 if "rememberMe" in request.POST:
                     request.session.set_expiry(2*7*24*60*60) # 2weeks (django default value)
                 else:
-                    request.session.set_expiry(5*60) #5 minutes
+                    request.session.set_expiry(24*60*60) #1 day
                 return HttpResponseRedirect(template_name) #リダイレクト
             else:
                 context['is_inactive'] = True #Userが無効である旨
@@ -100,7 +100,7 @@ def flag_submit_view(request, question_id):
     })
     return HttpResponse(response, content_type='application/json')
 
-# --- User Views (Register, Update, Delete) ---
+# --- User Views (Register, Delete) ---
 
 class RegisterView(generic.edit.CreateView):
     template_name = "scoreserver/register.html"
@@ -137,59 +137,7 @@ class RegisterView(generic.edit.CreateView):
         messages.warning(self.request, "Can't saved...")
         return super(RegisterView, self).form_invalid(form)
 
-class UserUpdateView(LoginRequiredMixin, generic.edit.UpdateView):
-    """
-    ユーザ更新(Profile)用のビュー
-    ユーザは、ユーザ名とパスワードの変更が可能である
-    """
-    slug_field = 'user_id'
-    slug_url_kwarg = 'user_id'
-    model = User
-    form_class = UserUpdateForm
-    template_name = "scoreserver/profile.html"
-    success_url = reverse_lazy('scoreserver:index')
 
-    def form_valid(self, form):
-        username = self.request.POST["username"]
-        password = self.request.POST["password"]
-        #ユーザ名が変更ありで、既にその新しいユーザ名のユーザが存在していたらダメ
-        if self.request.user.username != username and is_already_exist_user(username):
-            messages.warning(self.request, "This user had already registered!!")
-            return redirect(reverse_lazy("scoreserver:profile", kwargs={"pk": self.request.user.pk}))
-        result = super(UserUpdateView, self).form_valid(form)
-        if result: #フォームのバリデーションに引っかからなかったら、一緒にログイン処理もこちら側で行ってしまう
-            #super.form_validでは生パスワードを設定してしまうため、こちら側で行う
-            updated_user = User.objects.get(username=self.request.user.username)
-            updated_user.username = username
-            updated_user.set_password(password)
-            updated_user.save()
-            messages.success(self.request, "Saved {}!".format(username))
-            if self.request.user.is_authenticated(): #ログイン済みであれば
-                logout(self.request) #一旦ログアウト
-            authenticated_user = authenticate(username=username, password=password)
-            if authenticated_user is not None:
-                login(self.request, authenticated_user)
-            else:
-                messages.warning(self.request, "Please login")
-            print("Register Executed Queries {}".format(connection.queries))
-        else: #引っかかった
-            messages.warning(self.request, "Something went wrong... Please contact a system administrator.")
-        return result
-
-    def get_queryset(self):
-        queryset = super(UserUpdateView, self).get_queryset()
-        return queryset.filter(pk=self.request.user.pk)
-
-    def get_context_data(self, **kwargs):
-        context = super(UserUpdateView, self).get_context_data(**kwargs)
-        context['form'] = self.form_class(self.request.GET, instance=self.request.user)
-        return context
-
-    def get(self, request, *args, **kwargs):
-        super(UserUpdateView, self).get(request, *args, **kwargs)
-        form = self.form_class
-        context = self.get_context_data(object=self.object, form=form)
-        return self.render_to_response(context)
 
 # --- Question Views ---
 
