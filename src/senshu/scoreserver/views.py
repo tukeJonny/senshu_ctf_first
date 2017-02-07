@@ -10,7 +10,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.template.context import RequestContext
 from django.template.loader import get_template
-from .models import Question, Flag, AnswerHistory, AttackPointHistory
+from .models import Question, Flag, AnswerHistory, AttackPointHistory, Hint
 from .forms import UserUpdateForm
 from django.contrib.auth import get_user_model
 User = get_user_model()
