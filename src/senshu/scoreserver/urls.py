@@ -5,7 +5,7 @@ from . import views
 from .views import QuestionListView
 from .views import QuestionDetailView
 from .views import ScoreBoardView, WebView, NetworkView, CryptoView, ForensicsView, BinaryView, MiscView
-from .views import RegisterView, UserUpdateView
+from .views import RegisterView
 
 handler404 = 'scoreserver.views.not_found'
 handler403 = 'scoreserver.views.forbidden'
@@ -21,7 +21,6 @@ urlpatterns = [
     url(r'^scoreboard/$', ScoreBoardView.as_view(), name="scoreboard"),
     #User create, update, delete
     url(r'^register/$', RegisterView.as_view(), name="register"),
-    url(r'^profile/(?P<pk>\d+)/$', UserUpdateView.as_view(), name="profile"),
     #flag submit
     url(r'^submit/(?P<question_id>\d+)/$', views.flag_submit_view, name="submit"),
     #question list, detail, each category
