@@ -10,11 +10,11 @@ const bad = 2
 const already = 3
 
 function submit(){
-	if(! $.isNumeric($("#problem-id").attr('class')[0])){
+	if(! $.isNumeric($("#problem-id").attr('class'))){
 		console.error("invalid problem id");
 		return false;
 	}	
-	let id = parseInt($("#problem-id").attr('class')[0])
+	let id = parseInt($("#problem-id").attr('class'))
 	let flag = $("#flag-text").val()
 	let csrf = $("[name='csrfmiddlewaretoken']").val()
 	return $.ajax({
