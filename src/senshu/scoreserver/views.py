@@ -1,7 +1,8 @@
 #-*- coding: utf-8 -*-
 
+import json
 from django.core.urlresolvers import reverse, reverse_lazy
-from django.shortcuts import render, HttpResponseRedirect, redirect, render_to_response
+from django.shortcuts import render, HttpResponse, HttpResponseRedirect, redirect, render_to_response
 from django.views import generic
 from django.views import generic
 from django.contrib import messages
@@ -10,7 +11,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.template.context import RequestContext
 from django.template.loader import get_template
-from .models import Question, Flag, AnswerHistory, AttackPointHistory
+from .models import Question, Flag, AnswerHistory, AttackPointHistory, Hint
 from .forms import UserUpdateForm
 from django.contrib.auth import get_user_model
 User = get_user_model()
@@ -83,14 +84,21 @@ def flag_submit_view(request, question_id):
     #まだ正解しておらず、フラグが正しいのであれば攻撃成功とみなす
     if not is_already_attacked(request.user, question_id):
         if flag == answer: #正解した
-            messages.success(request, "Congraturations! flag is correct!") #正解した旨
             fs.success() #正解時の処理を行う
+            message = "Congraturations! flag is correct!"
+            status = 1
         else:
-            messages.warning(request, "Oh... flag is incorrect... please try again!") #不正解だった旨
             fs.fail() #不正解時の処理を行う
+            message = "Oh... flag is incorrect... please try again!"
+            status = 2
     else:
-        messages.warning(request, "You're already attacked this question.") #既にこの問題に対し、攻撃が成功済みである
-    return HttpResponseRedirect(reverse('scoreserver:question_detail', args=(question_id,))) #同じ画面に飛ばして、メッセージを表示させる
+        message = "You're already attacked this question." #既にこの問題に対し、攻撃が成功済みである
+        status = 3
+    response = json.dumps({
+        "status": status,
+        "message": message,
+    })
+    return HttpResponse(response, content_type='text/javascript')
 
 # --- User Views (Register, Update, Delete) ---
 
