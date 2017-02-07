@@ -3,6 +3,11 @@ $(document).ready(function(){
   $("#submit-flag").on("click",function(){
 	submit();
   });
+  $(document).on("keydown","input",function(e){
+	if(e.keyCode === 13) {
+		submit();
+	}
+  });
 });
 
 const accept = 1
