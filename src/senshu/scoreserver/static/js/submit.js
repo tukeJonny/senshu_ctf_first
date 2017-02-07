@@ -28,7 +28,10 @@ function submit(){
 		$("#flag-result").modal("toggle");
 	},function(data){
 		console.log("ajax fail");
-		$("#result-message").text("sprry,ajax request fail :/ please report admin.");
+		$("#result-message").text("sorry,ajax request fail :/            Please report admin.");
+		$("#result-color").removeClass();
+		$("#result-color").addClass("modal-content panel-danger");
+		$("#modal-head").text("Connection Error");
 		$("#flag-result").modal("toggle");
 	});
 }
