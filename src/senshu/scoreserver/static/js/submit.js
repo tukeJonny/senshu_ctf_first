@@ -22,13 +22,13 @@ function submit(){
 		url:"/scoreserver/submit/"+id+"/",
 		data:"flag="+flag+"&csrfmiddlewaretoken="+csrf,
 	}).then(function(data){
-		console.log("ajax ok");
+		console.log(data)
 		judge(data.status);
 		$("#result-message").text(data.message);
 		$("#flag-result").modal("toggle");
 	},function(data){
 		console.log("ajax fail");
-		$("#result-message").text(data.message);
+		$("#result-message").text("sprry,ajax request fail :/ please report admin.");
 		$("#flag-result").modal("toggle");
 	});
 }
@@ -39,19 +39,19 @@ function judge(status){
 			console.log("congratz");
 			$("#result-color").removeClass();
 			$("#result-color").addClass("modal-content panel-success");
-			$(".panel-heading").text("Congrats");
+			$("#modal-head").text("Congrats");
 			break;
 		case bad:
 			console.log("but flag");
 			$("#result-color").removeClass();
 			$("#result-color").addClass("modal-content panel-danger");
-			$(".panel-heading").text("uhhhhhhhh");
+			$("#modal-head").text("uhhhhhhhh");
 			break;
 		case already:
 			console.log("already solve");
 			$("#result-color").removeClass();
 			$("#result-color").addClass("modal-content panel-warning");
-			$(".panel-heading").text("ah?");
+			$("#modal-head").text("ah?");
 			break;
 	}
 }
