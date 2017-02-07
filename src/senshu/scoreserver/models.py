@@ -110,7 +110,19 @@ class AttackPointHistory(models.Model):
     point = models.IntegerField("得点")
 
     def __str__(self):
-        return "[+] {user}が{question_title}の正解フラグをSubmitし、{point}pt 獲得しました.".format(user=self.user.username, question_title=self.question.title, point=self.point)
+        return """
+        {user}が正解したディ! :100:
+        カテゴリ:     {question_category}
+        問題:         {question_title}
+        獲得ポイント:  {point} pt
+        獲得後ポイント: {acquired_point} pt
+        """.format(
+                user=self.user.username,
+                question_category=self.question.category.name,
+                question_title=self.question.title,
+                point=self.point,
+                acquired_point=self.user.points
+        )
 
 class AnswerHistory(models.Model):
     """ 回答履歴（成功しているかに関わらず） """
@@ -120,4 +132,14 @@ class AnswerHistory(models.Model):
     #正解フラグもあったほうが良い？
 
     def __str__(self):
-        return "[-] {user}が{question_title}のフラグ({submit_flag})をSubmitしました.".format(user=self.user.username, question_title=self.question.title, submit_flag=self.submit_flag)
+        return """
+        {user}が間違ったフラグを提出したディ... :broken_heart:
+        カテゴリ:   {question_category}
+        問題:      {question_title}
+        提出フラグ: {submit_flag}
+        """.format(
+            user=self.user.username,
+            question_category=self.question.category.name,
+            question_title=self.question.title,
+            submit_flag=self.submit_flag
+        )

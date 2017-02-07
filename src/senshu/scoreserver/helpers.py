@@ -18,11 +18,24 @@ def post_to_slack(channel, name, webhook_url, msg, icon_url):
     :param icon_url: 投稿者の画像アイコンのURL
     :return: Slack Incoming Webhookインテグレーションからのレスポンス
     """
+
     if webhook_url is not None:
+        if "success" in name:
+            color = "#36a64f"
+        else:
+            color = "#ff4500"
+
         payload = {
             "channel": channel,
             "username": name,
-            "text": msg, #投稿するテキスト
+            #"text": msg, #投稿するテキスト
+            "attachments": [
+                {
+                    "color": color,
+                    "title": "flag posted!",
+                    "text": msg
+                },
+            ],
             "icon_url": icon_url, #アイコン画像
         }
         jpayload = json.dumps(payload)

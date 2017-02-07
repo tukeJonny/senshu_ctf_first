@@ -21,25 +21,23 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '3q1of!^5_%#)h044@8whscn2u)yv36ijdpskk932^98$o8j6qj'
+
 # SECURITY WARNING: don't run with debug turned on in production!
 #Deploy
-#DEBUG=False
-#ALLOWED_HOSTS = ['*']
-
-#Develop
-DEBUG=True
+DEBUG=False
+ALLOWED_HOSTS = ['*']
 
 #Slack Incoming Webhook URL
 #Flag Correct
 SUCCESS_LOG_INCOMING_URL = None
 SUCCESS_LOG_INCOMING_IMAGE_URL = "http://p.twpl.jp/show/orig/aqrNm"
-SUCCESS_LOG_INCOMING_CHANNEL = "#test"
+SUCCESS_LOG_INCOMING_CHANNEL = "#sample_channel"
 SUCCESS_LOG_INCOMING_NAME = "success_log"
 
 #Flag Incorrect
 FAIL_LOG_INCOMING_URL = None
 FAIL_LOG_INCOMING_IMAGE_URL = "http://p.twpl.jp/show/orig/aqrNm"
-FAIL_LOG_INCOMING_CHANNEL = "#test"
+FAIL_LOG_INCOMING_CHANNEL = "#sample_channel"
 FAIL_LOG_INCOMING_NAME = "fail_log"
 
 # Application definition
@@ -119,7 +117,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTHENTICATION_BACKENDS = [
-    #'scoreserver.backends.AdminUserBackend',
     'django.contrib.auth.backends.ModelBackend',
     'scoreserver.backends.UserBackend',
 ]
@@ -131,16 +128,6 @@ LOGIN_URL = '/scoreserver/login'
 AUTH_USER_MODEL = 'scoreserver.User'
 SILENCED_SYSTEM_CHECKS = ["auth.E003", "auth.W004", "fields.W342"] #これあかんかも
 
-INSTALLED_APPS += ('debug_toolbar',)
-def callback_for_toolbar(request):
-    print("load debug toolbar...")
-    return True
-DEBUG_TOOLBAR_CONFIG = {
-    'INTERCEPT_REDIRECTS': False,
-    'SHOW_TOOLBAR_CALLBACK': callback_for_toolbar,
-    'TAG': 'div',
-    'ENABLE_STACKTRACE': True,
-}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
