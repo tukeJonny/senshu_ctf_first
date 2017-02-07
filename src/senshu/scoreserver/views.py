@@ -98,7 +98,7 @@ def flag_submit_view(request, question_id):
         "status": status,
         "message": message,
     })
-    return HttpResponse(response, content_type='text/javascript')
+    return HttpResponse(response, content_type='application/json')
 
 # --- User Views (Register, Update, Delete) ---
 

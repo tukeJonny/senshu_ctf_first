@@ -17,9 +17,12 @@
 <div class="main">
 
 <div id="flag-result" class="modal fade " tabindex="-1" role="dialog" >
-  <div class="modal-dialog modal-sm">
-    <div class="modal-content">
-      ...
+  <div id="flag-result" class="modal-dialog modal-large">
+    <div id="result-color" class="modal-content">
+      <div class="panel-heading"></div>
+      <div class="panel-body">
+        <p id="result-message"></p>
+      </div>
     </div>
   </div>
 </div>
@@ -47,14 +50,12 @@
           {% endif %}
         <div class="form-group">
 	  <div id="problem-id" class="{{ question.id }}"></div> 
-          <form >
             <input type="text"id="flag-text" class="form-control" name="flag" placeholder="input flag">
             <input type="button" id="submit-flag" class="btn btn-primary pull-right form-control" value="Submit">
             <!--<i class="fa fa-flag"> Submit</i>!-->
             </input>
             </br>
             {% csrf_token %}
-          </form>
         </div>
         </p>
         {% if question.url %} <!-- file_urlが空かどうかの判定-->
