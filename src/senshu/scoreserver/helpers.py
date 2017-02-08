@@ -1,3 +1,4 @@
+#-*- coding: utf-8 -*-
 import json
 from scoreserver.models import Question, Flag, AnswerHistory, AttackPointHistory
 from django.contrib.auth import get_user_model
